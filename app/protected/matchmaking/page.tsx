@@ -93,9 +93,9 @@ export default function CodenamesPage() {
     };
   }, []);
 
-  // Navigates to /account-page when profile button is clicked.
+  // Navigates to /protected/account when profile button is clicked.
   const handleProfileClick = () => {
-    router.push('/account-page');
+    router.push('/protected/account');
   };
 
   // Handler for selecting a player button.

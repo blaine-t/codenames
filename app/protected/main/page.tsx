@@ -38,15 +38,15 @@ export default function CodenamesPage() {
     };
   }, []);
 
-  // Navigates to /account-page when profile button is clicked.
+  // Navigates to /protected/account when profile button is clicked.
   const handleProfileClick = () => {
-    router.push('/account-page');
+    router.push('/protected/account');
   };
 
-  // Navigates to /matchmaking-page and passes the code as a query parameter.
+  // Navigates to /protected/matchmaking and passes the code as a query parameter.
   const handleJoinClick = () => {
     if (code.length === 4) {
-      router.push(`/matchmaking-page?code=${code}`);
+      router.push(`/protected/matchmaking?code=${code}`);
     } else {
       alert('Please enter a 4-digit code before joining.');
     }
@@ -60,9 +60,9 @@ export default function CodenamesPage() {
     }
   };
 
-  // Navigates to /matchmaking-page when host button is clicked.
+  // Navigates to /protected/matchmaking when host button is clicked.
   const handleHostClick = () => {
-    router.push('/matchmaking-page');
+    router.push('/protected/matchmaking');
   };
 
   return (

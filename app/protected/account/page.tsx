@@ -39,7 +39,7 @@ export default function CodenamesPage() {
 
   // Example function for profile navigation (add more as needed)
   const handleProfileClick = () => {
-    router.push('/account-page');
+    router.push('/protected/account');
   };
 
   return (
