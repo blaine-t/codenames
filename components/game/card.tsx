@@ -4,6 +4,8 @@ interface CardProps {
 
 export default function Card({ word }: CardProps) {
   return (
-    <button className="card">{word}</button>
+    <div className="card">
+        <button className="card-button">{word}</button>
+    </div>
   );
 }
