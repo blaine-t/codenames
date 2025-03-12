@@ -67,3 +67,84 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  /* Title image (centers the logo horizontally at the top) */
+  .title-image {
+    @apply flex justify-center items-center mb-5 w-full;
+  }
+
+  /* Codenames container (sets up the main container for the page) */
+  .codenames-container {
+    @apply flex flex-col items-center justify-center h-[50vh] w-full relative overflow-hidden;
+  }
+
+  /* Profile button (fixed in the top-right corner) */
+  .profile-button {
+    @apply fixed top-[110px] right-[20px] cursor-pointer bg-blue-500 text-white p-2 rounded-lg;
+  }
+
+  /* Join section and host section styling */
+  .join-section, .host-section {
+    @apply w-full text-center mb-5;
+  }
+
+  /* Code input (sets width and padding) */
+  .code-input {
+    @apply w-[150px] p-2 text-center border border-gray-300 rounded-lg;
+  }
+
+  /* Game code label and its layout */
+  .game-code {
+    @apply mt-2 flex items-center font-bold text-xl;
+  }
+
+  .game-code-label {
+    @apply mr-2;
+  }
+
+  /* Grid layout for player buttons */
+  .player-buttons-container {
+    @apply grid grid-cols-2 gap-2 w-[80%] max-w-[500px] mx-auto;
+  }
+
+  /* Player select button */
+  .player-select-button {
+    @apply bg-gray-500 text-white border-none py-5 px-16 rounded-lg cursor-pointer min-w-[175px] whitespace-nowrap flex items-center justify-center;
+  }
+
+  /* Selected player button */
+  .player-select-button.selected {
+    @apply bg-red-500;
+  }
+
+  /* Turn timer section */
+  .turn-time {
+    @apply mt-2 flex items-center font-bold text-xl;
+  }
+
+  .turn-time-label {
+    @apply mr-2;
+  }
+
+  /* Turn time input field */
+  .turn-time-input {
+    @apply text-xl p-1 w-[80px];
+  }
+
+  /* Start button container */
+  .start-button-container {
+    @apply mt-5;
+  }
+
+  /* Start button styling */
+  .start-button {
+    @apply bg-green-500 text-white border-none py-5 px-16 rounded-lg cursor-pointer min-w-[200px] whitespace-nowrap flex items-center justify-center;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
