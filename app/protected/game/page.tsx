@@ -15,6 +15,13 @@ export default async function GamePage() {
   }
 
   return (
-    <CardGrid />
+    <div className="table">
+      <div>
+        {/* <TimeBox /> */}
+        {/* <RoleBox /> */}
+      </div>
+      <CardGrid />
+      {/* <StatusBox /> */}
+    </div>
   );
 }

@@ -1,0 +1,16 @@
+.cardGrid {
+  margin: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  align-content: stretch;
+  align-items: stretch;
+  align-self: stretch;
+  justify-content: stretch;
+  justify-items: stretch;
+  justify-self: stretch;
+  column-gap: 1.6vh;
+  row-gap: 1vh;
+  /* Change later */
+  width: 120vh;
+  height: 75vh;
+}

@@ -141,45 +141,30 @@
   .start-button {
     @apply bg-green-500 text-white border-none py-5 px-16 rounded-lg cursor-pointer min-w-[200px] whitespace-nowrap flex items-center justify-center;
   }
-
-  .card-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    align-content: stretch;
-    align-items: stretch;
-    align-self: stretch;
-    justify-content: stretch;
-    justify-items: stretch;
-    justify-self: stretch;
-    column-gap: 1.6vh;
-    row-gap: 1vh;
-    /* Change later */
-    width: 120vh;
-    height: 75vh;
-  }
-  .card {
-    display: flex;
-    background-color: #f2eadc;
-    justify-content: center;
-    align-items: center;
-    border-color: #d2c2a5;
-    border-radius: 1.5vh;
-    border-width: 1.25vh;
-  }
-
-  .card-button {
-    background-color: white;
-    width: 80%;
-    height: 40%;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: bold;
-    font-size: 2.5vh;
-    text-transform: uppercase;
-  }
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
+}
+
+.table {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("/table.jpg");
+  background-size: cover;
+}
+
+.time-box {
+
+}
+
+.role-box {
+
+}
+
+.status-box {
+
 }
