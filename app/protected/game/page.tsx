@@ -19,7 +19,7 @@ export default async function GamePage() {
 
   return (
     <>
-      <TimeBox seconds={30} />
+      <TimeBox seconds={90} />
       <div className="table">
         <RoleBox role={"Guesser"} />
         <CardGrid />
