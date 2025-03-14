@@ -129,7 +129,7 @@
 
   /* Turn time input field */
   .turn-time-input {
-    @apply text-xl p-1 w-[80px];
+    @apply border text-xl p-1 w-[80px];
   }
 
   /* Start button container */
@@ -236,7 +236,7 @@
 
     /* Generic action button styling */
     .action-button {
-      @apply bg-black text-white px-6 py-2 rounded-lg cursor-pointer mt-4;
+      @apply bg-foreground text-background px-6 py-2 rounded-lg cursor-pointer;
     }
   }  
 }
@@ -249,9 +249,10 @@ body {
 
 .join-section {
   display: flex;
-  flex-direction: column;
-  align-items: center; 
-  gap: 8px; 
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px; 
 }
 
 .main-container {

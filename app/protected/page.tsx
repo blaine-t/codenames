@@ -30,7 +30,7 @@ export default function CodenamesPage() {
       setCode(newValue);
     }
   };
-  const handleHostClick = () => router.push('/protected/matchmaking');
+  const handleHostClick = () => router.push(`/protected/matchmaking?code=${9719}`);
 
   return (
     <div className="page-container">
@@ -41,7 +41,6 @@ export default function CodenamesPage() {
       </button>
 
       <div className="join-section">
-        <button onClick={handleJoinClick}>Join</button>
         <input
           type="text"
           placeholder="Enter code here"
@@ -49,10 +48,11 @@ export default function CodenamesPage() {
           onChange={handleCodeChange}
           className="code-input"
         />
+        <button className='action-button' onClick={handleJoinClick}>Join</button>
       </div>
 
       <div className="host-section">
-        <button onClick={handleHostClick}>Host</button>
+        <button className='action-button' onClick={handleHostClick}>Host</button>
       </div>
     </div>
   );
