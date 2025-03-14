@@ -34,13 +34,7 @@ export default function SettingsPage() {
       <div className="settings-section">
         <h2 className="settings-title">Settings</h2>
         <div className="profile-settings">
-          <Image
-            src={profilePic}
-            alt="Profile Picture"
-            width={100}
-            height={100}
-            className="profile-pic"
-          />
+          <label>Profile Picture:</label>
           <input type="file" accept="image/*" onChange={handleProfilePicChange} />
         </div>
         <div className="username-settings">

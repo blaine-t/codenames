@@ -148,8 +148,8 @@
     }
   
     .back-button {
-      @apply fixed top-[20px] left-[20px] bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer;
-    }
+      @apply fixed top-[20px] left-[20px] bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer bg-background text-foreground z-50;
+    }    
   
     .profile-section {
       @apply flex flex-col items-center bg-card p-6 rounded-lg shadow-lg w-[300px];
@@ -193,32 +193,45 @@
       @apply flex flex-col items-center justify-center h-screen w-full bg-background text-foreground;
     }
   
+    .settings-title {
+      @apply text-2xl font-bold mb-4;
+    }
+  
     .back-button {
       @apply fixed top-[20px] left-[20px] bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer;
     }
   
     .settings-section {
-      @apply flex flex-col items-center bg-card p-6 rounded-lg shadow-lg w-80;
+      @apply grid grid-cols-1 gap-6 bg-card p-6 rounded-lg shadow-lg h-[75vh] w-[80vw] items-start;
     }
   
+    /* Profile Picture Preview */
     .profile-pic-preview {
-      @apply rounded-full border-4 border-gray-300 w-24 h-24 object-cover;
+      @apply flex border-4 border-gray-300 w-24 h-24 object-cover rounded-full;
     }
   
-    .file-input {
-      @apply mt-3;
+    /* Profile Picture Input */
+    .profile-settings input[type="file"] {
+      @apply w-full mt-2;
     }
   
-    .username-input {
-      @apply mt-4 px-3 py-2 border border-gray-400 rounded-lg w-full text-center;
-    }
-  
+    /* Inputs and Buttons Styling */
+    .file-input,
+    .username-input,
     .save-button {
-      @apply mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg cursor-pointer;
+      @apply w-full;
     }
-  }
   
+    /* Specific Input Styling */
+    .username-input {
+      @apply px-3 py-2 border border-gray-400 rounded-lg text-center mt-2;
+    }
   
+    /* Save Button Styling */
+    .save-button {
+      @apply bg-blue-500 text-white px-6 py-2 rounded-lg cursor-pointer mt-4;
+    }
+  }  
 }
 
 body {
