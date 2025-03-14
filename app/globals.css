@@ -284,7 +284,7 @@ body {
 }
 
 .wrapper {
-  background-color: white;
+  @apply bg-background text-foreground;
   width: fit-content;
   padding: 24px;
   border-radius: 1.5vw;
