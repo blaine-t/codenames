@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import "../../globals.css";
@@ -47,7 +47,7 @@ const PlayerSelectButton: React.FC<PlayerSelectButtonProps> = ({
   );
 };
 
-export default function CodenamesPage() {
+function CodenamesPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const gameCode = searchParams.get('code') || '';
@@ -124,5 +124,13 @@ export default function CodenamesPage() {
         Account
       </button>
     </div>
+  );
+}
+
+export default function CodenamesPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CodenamesPageContent />
+    </Suspense>
   );
 }
