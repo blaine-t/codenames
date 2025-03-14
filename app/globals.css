@@ -141,6 +141,84 @@
   .start-button {
     @apply bg-green-500 text-white border-none py-5 px-16 rounded-lg cursor-pointer min-w-[200px] whitespace-nowrap flex items-center justify-center;
   }
+
+  @layer components {
+    .account-container {
+      @apply flex flex-col items-center justify-center h-screen w-full bg-background text-foreground;
+    }
+  
+    .back-button {
+      @apply fixed top-[20px] left-[20px] bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer;
+    }
+  
+    .profile-section {
+      @apply flex flex-col items-center bg-card p-6 rounded-lg shadow-lg w-[300px];
+    }
+  
+    .profile-pic {
+      @apply rounded-full border-4 border-gray-300;
+    }
+  
+    .username {
+      @apply text-xl font-bold mt-3;
+    }
+  
+    .settings-button {
+      @apply mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg cursor-pointer;
+    }
+  
+    .logout-button {
+      @apply mt-2 bg-red-500 text-white px-6 py-2 rounded-lg cursor-pointer;
+    }
+  
+    .friends-section {
+      @apply mt-6 w-[300px] text-center;
+    }
+  
+    .friends-title {
+      @apply text-lg font-bold mb-2;
+    }
+  
+    .friends-list {
+      @apply bg-card p-4 rounded-lg shadow-md;
+    }
+  
+    .friend {
+      @apply bg-gray-500 text-white px-4 py-2 rounded-lg mb-2;
+    }
+  }
+
+  @layer components {
+    .settings-container {
+      @apply flex flex-col items-center justify-center h-screen w-full bg-background text-foreground;
+    }
+  
+    .back-button {
+      @apply fixed top-[20px] left-[20px] bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer;
+    }
+  
+    .settings-section {
+      @apply flex flex-col items-center bg-card p-6 rounded-lg shadow-lg w-80;
+    }
+  
+    .profile-pic-preview {
+      @apply rounded-full border-4 border-gray-300 w-24 h-24 object-cover;
+    }
+  
+    .file-input {
+      @apply mt-3;
+    }
+  
+    .username-input {
+      @apply mt-4 px-3 py-2 border border-gray-400 rounded-lg w-full text-center;
+    }
+  
+    .save-button {
+      @apply mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg cursor-pointer;
+    }
+  }
+  
+  
 }
 
 body {
@@ -165,9 +243,12 @@ body {
 
 }
 
+<<<<<<< Updated upstream
 .game-code {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 1rem; /* optional spacing */
 }
+=======
+>>>>>>> Stashed changes
