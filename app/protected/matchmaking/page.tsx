@@ -75,7 +75,7 @@ function CodenamesPageContent() {
   };
 
   const handleStart = () => {
-    router.push('/game-page');
+    router.push('/protected/game');
   };
 
   const renderPlayerButtons = () => {
