@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import "../../globals.css";
 
@@ -49,6 +49,9 @@ const PlayerSelectButton: React.FC<PlayerSelectButtonProps> = ({
 
 export default function CodenamesPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const gameCode = searchParams.get('code') || '';
+
   const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null);
 
   useEffect(() => {
@@ -100,7 +103,7 @@ export default function CodenamesPage() {
 
   return (
     <div className="main-container">
-      <TitleImage gameCode={''} />
+      <TitleImage gameCode={gameCode} />
       {renderPlayerButtons()}
       <div className="turn-time">
         <span className="turn-time-label">Seconds per turn:</span>
