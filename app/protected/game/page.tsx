@@ -21,7 +21,7 @@ export default async function GamePage() {
     <>
       <TimeBox seconds={90} />
       <div className="table">
-        <RoleBox role={"Guesser"} />
+        <RoleBox role={"Operative"} />
         <CardGrid />
         <StatusBox clue="green" guesses={5} guessesLeft={6}/>
       </div>
