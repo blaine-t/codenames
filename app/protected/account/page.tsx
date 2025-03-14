@@ -8,13 +8,8 @@ import "../../globals.css";
 export default function AccountPage() {
   const router = useRouter();
 
-  const handleLogout = () => {
-    // Logout functionality (To be implemented)
-    console.log("Logging out...");
-  };
-
   const handleBack = () => {
-    router.push("/protected/main");
+    router.push("/protected");
   };
 
   const handleSettings = () => {
@@ -23,11 +18,6 @@ export default function AccountPage() {
 
   return (
     <div className="account-container">
-      {/* Back Button */}
-      <button className="back-button" onClick={handleBack}>
-        ← Back
-      </button>
-
       {/* Profile Section */}
       <div className="profile-section">
         <Image
@@ -37,12 +27,12 @@ export default function AccountPage() {
           height={100}
           className="profile-pic"
         />
-        <h2 className="username">BT5000</h2> {/* Will handle actual account name Later */}
+        <h2 className="username">blaine-t</h2>
+        <p>Wins: 5</p>
+        <p>Losses: 10</p>
+        <p>ELO: 1600</p>
         <button className="settings-button" onClick={handleSettings}>
           ⚙️ Settings
-        </button>
-        <button className="logout-button" onClick={handleLogout}>
-          Logout
         </button>
       </div>
 

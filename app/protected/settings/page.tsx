@@ -7,12 +7,8 @@ import "../../globals.css";
 
 export default function SettingsPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("CurrentUser");
+  const [username, setUsername] = useState("blaine-t");
   const [profilePic, setProfilePic] = useState("/samplePFP.png");
-
-  const handleBack = () => {
-    router.push("/protected/account");
-  };
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -26,14 +22,16 @@ export default function SettingsPage() {
     }
   };
 
+  const handleSaveChanges = () => {
+    router.push("/protected/account");
+  }
+
   return (
     <div className="settings-container">
-      <button className="back-button" onClick={handleBack}>
-        ← Back
-      </button>
       <div className="settings-section">
         <h2 className="settings-title">Settings</h2>
         <div className="profile-settings">
+          <Image src={profilePic} alt="Profile Picture" width={100} height={100} className="profile-pic" />
           <label>Profile Picture:</label>
           <input type="file" accept="image/*" onChange={handleProfilePicChange} />
         </div>
@@ -46,7 +44,13 @@ export default function SettingsPage() {
             className="username-input"
           />
         </div>
-        <button className="save-button">Save Changes</button>
+        <div>
+          <label>Password:</label>
+          <br />
+          <br />
+          <a className="action-button" href="/protected/reset-password">Reset your Password</a>
+        </div>
+        <button onClick={handleSaveChanges} className="save-button">Save Changes</button>
       </div>
     </div>
   );

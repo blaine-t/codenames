@@ -132,3 +132,11 @@ export const signOutAction = async () => {
   await supabase.auth.signOut();
   return redirect("/sign-in");
 };
+
+export const accountAction = async () => {
+  return redirect("/protected/account");
+}
+
+export const backAction = async () => {
+  return redirect("/protected");
+}

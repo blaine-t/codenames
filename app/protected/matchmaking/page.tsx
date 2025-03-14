@@ -75,7 +75,7 @@ function CodenamesPageContent() {
   };
 
   const handleStart = () => {
-    router.push('/game-page');
+    router.push('/protected/game');
   };
 
   const renderPlayerButtons = () => {
@@ -120,9 +120,6 @@ function CodenamesPageContent() {
           Start
         </button>
       </div>
-      <button onClick={handleProfileClick} className="profile-button">
-        Account
-      </button>
     </div>
   );
 }

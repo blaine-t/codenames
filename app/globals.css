@@ -81,7 +81,7 @@
 
   /* Profile button (fixed in the top-right corner) */
   .profile-button {
-    @apply fixed top-[110px] right-[20px] cursor-pointer bg-blue-500 text-white p-2 rounded-lg;
+    @apply cursor-pointer bg-blue-500 text-white p-2 rounded-lg;
   }
 
   /* Join section and host section styling */
@@ -129,7 +129,7 @@
 
   /* Turn time input field */
   .turn-time-input {
-    @apply text-xl p-1 w-[80px];
+    @apply border text-xl p-1 w-[80px];
   }
 
   /* Start button container */
@@ -147,16 +147,14 @@
       @apply flex flex-col items-center justify-center h-screen w-full bg-background text-foreground;
     }
   
-    .back-button {
-      @apply fixed top-[20px] left-[20px] bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer bg-background text-foreground z-50;
-    }    
-  
     .profile-section {
       @apply flex flex-col items-center bg-card p-6 rounded-lg shadow-lg w-[300px];
     }
   
     .profile-pic {
       @apply rounded-full border-4 border-gray-300;
+      width: 100px;
+      height: 100px;
     }
   
     .username {
@@ -197,10 +195,6 @@
       @apply text-2xl font-bold mb-4;
     }
   
-    .back-button {
-      @apply fixed top-[20px] left-[20px] bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer;
-    }
-  
     .settings-section {
       @apply grid grid-cols-1 gap-6 bg-card p-6 rounded-lg shadow-lg h-[75vh] w-[80vw] items-start;
     }
@@ -231,20 +225,26 @@
     .save-button {
       @apply bg-blue-500 text-white px-6 py-2 rounded-lg cursor-pointer mt-4;
     }
+
+    /* Generic action button styling */
+    .action-button {
+      @apply bg-foreground text-background px-6 py-2 rounded-lg cursor-pointer;
+    }
   }  
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .join-section {
   display: flex;
-  flex-direction: column;
-  align-items: center; 
-  gap: 8px; 
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px; 
 }
 
 .main-container {
@@ -271,4 +271,21 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+}
+
+.background {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("/background.png");
+  width: 100vw;
+  height: 100vh;
+}
+
+.wrapper {
+  background-color: white;
+  width: fit-content;
+  padding: 24px;
+  border-radius: 1.5vw;
 }

@@ -1,37 +1,54 @@
-import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
-import { createClient } from "@/utils/supabase/server";
-import { InfoIcon } from "lucide-react";
-import { redirect } from "next/navigation";
+"use client";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import "../globals.css";
+import TitleImage from '@/components/titleImage';
 
-export default async function ProtectedPage() {
-  const supabase = await createClient();
+export default function CodenamesPage() {
+  const router = useRouter();
+  const [code, setCode] = useState('');
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
 
-  if (!user) {
-    return redirect("/sign-in");
-  }
+  
+  const handleJoinClick = () => {
+    if (code.length === 4) {
+      router.push(`/protected/matchmaking?code=${code}`);
+    } else {
+      alert('Please enter a 4-digit code before joining.');
+    }
+  };
+  const handleCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    if (/^\d{0,4}$/.test(newValue)) {
+      setCode(newValue);
+    }
+  };
+  const handleHostClick = () => router.push(`/protected/matchmaking?code=${9719}`);
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="w-full">
-        <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
-          <InfoIcon size="16" strokeWidth={2} />
-          This is a protected page that you can only see as an authenticated
-          user
-        </div>
+    <div className="page-container">
+      <TitleImage />
+
+      <div className="join-section">
+        <input
+          type="text"
+          placeholder="Enter code here"
+          value={code}
+          onChange={handleCodeChange}
+          className="code-input"
+        />
+        <button className='action-button' onClick={handleJoinClick}>Join</button>
       </div>
-      <div className="flex flex-col gap-2 items-start">
-        <h2 className="font-bold text-2xl mb-4">Your user details</h2>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-          {JSON.stringify(user, null, 2)}
-        </pre>
-      </div>
-      <div>
-        <h2 className="font-bold text-2xl mb-4">Next steps</h2>
-        <FetchDataSteps />
+
+      <div className="host-section">
+        <button className='action-button' onClick={handleHostClick}>Host</button>
       </div>
     </div>
   );
