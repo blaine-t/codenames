@@ -27,7 +27,7 @@ export default function AccountPage() {
           height={100}
           className="profile-pic"
         />
-        <h2 className="username">BT5000</h2> {/* Will handle actual account name Later */}
+        <h2 className="username">blaine-t</h2>
         <button className="settings-button" onClick={handleSettings}>
           ⚙️ Settings
         </button>

@@ -7,12 +7,8 @@ import "../../globals.css";
 
 export default function SettingsPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("CurrentUser");
+  const [username, setUsername] = useState("blaine-t");
   const [profilePic, setProfilePic] = useState("/samplePFP.png");
-
-  const handleBack = () => {
-    router.push("/protected/account");
-  };
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
