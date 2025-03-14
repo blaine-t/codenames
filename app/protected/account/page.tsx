@@ -1,41 +1,60 @@
 "use client";
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+
+import React from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 import "../../globals.css";
 
-function TitleImage() {
-  return (
-    <div className="title-image">
-      <Image 
-        src="/codenameslogo.png" 
-        alt="Codenames Logo" 
-        width={300} 
-        height={80}
-      />
-    </div>
-  );
-}
-
-export default function CodenamesPage() {
+export default function AccountPage() {
   const router = useRouter();
 
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
+  const handleLogout = () => {
+    // Logout functionality (To be implemented)
+    console.log("Logging out...");
+  };
 
-  const handleProfileClick = () => {
-    router.push('/protected/account');
+  const handleBack = () => {
+    router.push("/protected/main");
+  };
+
+  const handleSettings = () => {
+    router.push("/protected/settings");
   };
 
   return (
-    <div className="codenames-container">
-      <TitleImage />
-      <button className="profile-button" onClick={handleProfileClick}>Account</button>
+    <div className="account-container">
+      {/* Back Button */}
+      <button className="back-button" onClick={handleBack}>
+        ← Back
+      </button>
+
+      {/* Profile Section */}
+      <div className="profile-section">
+        <Image
+          src="/samplePFP.png"
+          alt="Profile Picture"
+          width={100}
+          height={100}
+          className="profile-pic"
+        />
+        <h2 className="username">BT5000</h2> {/* Will handle actual account name Later */}
+        <button className="settings-button" onClick={handleSettings}>
+          ⚙️ Settings
+        </button>
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
+
+      {/* Friends List */}
+      <div className="friends-section">
+        <h3 className="friends-title">Friends</h3>
+        <ul className="friends-list">
+          <li className="friend">👤 Friend 1</li>
+          <li className="friend">👤 Friend 2</li>
+          <li className="friend">👤 Friend 3</li>
+        </ul>
+      </div>
     </div>
   );
 }
