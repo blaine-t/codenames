@@ -157,6 +157,8 @@
   
     .profile-pic {
       @apply rounded-full border-4 border-gray-300;
+      width: 100px;
+      height: 100px;
     }
   
     .username {
