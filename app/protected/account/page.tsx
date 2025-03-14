@@ -14,7 +14,7 @@ export default function AccountPage() {
   };
 
   const handleBack = () => {
-    router.push("/protected/main");
+    router.push("/protected");
   };
 
   const handleSettings = () => {
