@@ -46,6 +46,12 @@ export default function SettingsPage() {
             className="username-input"
           />
         </div>
+        <div>
+          <label>Password:</label>
+          <br />
+          <br />
+          <a className="action-button" href="/protected/reset-password">Reset your Password</a>
+        </div>
         <button className="save-button">Save Changes</button>
       </div>
     </div>

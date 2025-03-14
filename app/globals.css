@@ -231,6 +231,11 @@
     .save-button {
       @apply bg-blue-500 text-white px-6 py-2 rounded-lg cursor-pointer mt-4;
     }
+
+    /* Generic action button styling */
+    .action-button {
+      @apply bg-black text-white px-6 py-2 rounded-lg cursor-pointer mt-4;
+    }
   }  
 }
 
