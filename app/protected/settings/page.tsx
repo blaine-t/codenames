@@ -22,6 +22,10 @@ export default function SettingsPage() {
     }
   };
 
+  const handleSaveChanges = () => {
+    router.push("/protected/account");
+  }
+
   return (
     <div className="settings-container">
       <div className="settings-section">
@@ -45,7 +49,7 @@ export default function SettingsPage() {
           <br />
           <a className="action-button" href="/protected/reset-password">Reset your Password</a>
         </div>
-        <button className="save-button">Save Changes</button>
+        <button onClick={handleSaveChanges} className="save-button">Save Changes</button>
       </div>
     </div>
   );
