@@ -1,21 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import "../../globals.css";
-
-function TitleImage() {
-  return (
-    <div className="title-image">
-      <Image 
-        src="/codenameslogo.png" 
-        alt="Codenames Logo" 
-        width={300} 
-        height={80}
-      />
-    </div>
-  );
-}
+import TitleImage from '@/components/titleImage';
 
 export default function CodenamesPage() {
   const router = useRouter();
