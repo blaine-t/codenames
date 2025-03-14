@@ -45,7 +45,7 @@ export default function RootLayout({
                     <div className="flex items-center">
                      </div>
                   </div>
-                  {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
+                    {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth pathname='TODO' />}
                 </div>
               </nav>
               <div >

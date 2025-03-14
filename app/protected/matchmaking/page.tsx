@@ -120,9 +120,6 @@ function CodenamesPageContent() {
           Start
         </button>
       </div>
-      <button onClick={handleProfileClick} className="profile-button">
-        Account
-      </button>
     </div>
   );
 }

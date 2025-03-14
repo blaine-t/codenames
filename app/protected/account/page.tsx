@@ -8,11 +8,6 @@ import "../../globals.css";
 export default function AccountPage() {
   const router = useRouter();
 
-  const handleLogout = () => {
-    // Logout functionality (To be implemented)
-    console.log("Logging out...");
-  };
-
   const handleBack = () => {
     router.push("/protected");
   };
@@ -23,11 +18,6 @@ export default function AccountPage() {
 
   return (
     <div className="account-container">
-      {/* Back Button */}
-      <button className="back-button" onClick={handleBack}>
-        ← Back
-      </button>
-
       {/* Profile Section */}
       <div className="profile-section">
         <Image
@@ -40,9 +30,6 @@ export default function AccountPage() {
         <h2 className="username">BT5000</h2> {/* Will handle actual account name Later */}
         <button className="settings-button" onClick={handleSettings}>
           ⚙️ Settings
-        </button>
-        <button className="logout-button" onClick={handleLogout}>
-          Logout
         </button>
       </div>
 

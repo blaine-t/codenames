@@ -28,9 +28,6 @@ export default function SettingsPage() {
 
   return (
     <div className="settings-container">
-      <button className="back-button" onClick={handleBack}>
-        ← Back
-      </button>
       <div className="settings-section">
         <h2 className="settings-title">Settings</h2>
         <div className="profile-settings">

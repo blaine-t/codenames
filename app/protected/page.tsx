@@ -16,7 +16,7 @@ export default function CodenamesPage() {
     };
   }, []);
 
-  const handleProfileClick = () => router.push('/protected/account');
+  
   const handleJoinClick = () => {
     if (code.length === 4) {
       router.push(`/protected/matchmaking?code=${code}`);
@@ -35,10 +35,6 @@ export default function CodenamesPage() {
   return (
     <div className="page-container">
       <TitleImage />
-
-      <button onClick={handleProfileClick} className="profile-button">
-        Account
-      </button>
 
       <div className="join-section">
         <input

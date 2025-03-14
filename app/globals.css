@@ -81,7 +81,7 @@
 
   /* Profile button (fixed in the top-right corner) */
   .profile-button {
-    @apply fixed top-[110px] right-[20px] cursor-pointer bg-blue-500 text-white p-2 rounded-lg;
+    @apply cursor-pointer bg-blue-500 text-white p-2 rounded-lg;
   }
 
   /* Join section and host section styling */
@@ -147,10 +147,6 @@
       @apply flex flex-col items-center justify-center h-screen w-full bg-background text-foreground;
     }
   
-    .back-button {
-      @apply fixed top-[20px] left-[20px] bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer bg-background text-foreground z-50;
-    }    
-  
     .profile-section {
       @apply flex flex-col items-center bg-card p-6 rounded-lg shadow-lg w-[300px];
     }
@@ -197,10 +193,6 @@
   
     .settings-title {
       @apply text-2xl font-bold mb-4;
-    }
-  
-    .back-button {
-      @apply fixed top-[20px] left-[20px] bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer;
     }
   
     .settings-section {
