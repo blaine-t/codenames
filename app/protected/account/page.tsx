@@ -28,6 +28,9 @@ export default function AccountPage() {
           className="profile-pic"
         />
         <h2 className="username">blaine-t</h2>
+        <p>Wins: 5</p>
+        <p>Losses: 10</p>
+        <p>ELO: 1600</p>
         <button className="settings-button" onClick={handleSettings}>
           ⚙️ Settings
         </button>
