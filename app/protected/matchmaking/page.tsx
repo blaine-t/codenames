@@ -75,7 +75,15 @@ function CodenamesPageContent() {
   };
 
   const handleStart = () => {
-    router.push('/protected/game');
+    if (selectedPlayer !== null) {
+      const role = selectedPlayer < 2 ? "Spymaster" : "Operative";
+      const team = selectedPlayer % 2 === 1 ? "blue" : "red";
+  
+      localStorage.setItem("playerRole", role);
+      localStorage.setItem("playerTeam", team);
+  
+      router.push('/protected/game');
+    }
   };
 
   const renderPlayerButtons = () => {
