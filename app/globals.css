@@ -170,4 +170,75 @@ body {
   flex-direction: column;
   align-items: center;
   margin-bottom: 1rem; /* optional spacing */
+<<<<<<< Updated upstream
 }
+=======
+}
+
+.table {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("/table.jpg");
+  background-size: cover;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.background {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("/background.png");
+  width: 100vw;
+  height: 100vh;
+}
+
+.wrapper {
+  @apply bg-background text-foreground;
+  width: fit-content;
+  padding: 24px;
+  border-radius: 1.5vw;
+}
+
+@layer components {
+  /* Grid container to center the four role buttons */
+  .player-buttons-container {
+    @apply grid grid-cols-2 gap-4 gap-x-14 justify-items-center;
+  }
+
+  /* Wrapper for each button + player name (layout vertically) */
+  .player-select-wrapper {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  /* Button styling updated to have fixed width and height */
+  .player-select-button {
+    @apply bg-gray-500 text-white border-none rounded-lg cursor-pointer flex items-center justify-center;
+    @apply w-48 h-16; /* These classes ensure identical size for all buttons */
+  }
+
+  /* Styling for the player name text */
+  .player-name {
+    @apply text-lg font-medium text-gray-800 mt-1;
+  }
+
+  @layer components {
+    /* Base team‐header (font size + weight) */
+    .team-header {
+      @apply text-2xl font-bold;
+    }
+  
+    /* Specific colors for each team */
+    .team-header-red {
+      @apply text-red-600;
+    }
+    .team-header-blue {
+      @apply text-blue-600;
+    }
+  }
+  
+}
+>>>>>>> Stashed changes
