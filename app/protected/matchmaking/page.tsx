@@ -69,7 +69,11 @@ function CodenamesPageContent() {
   };
 
   const handleStart = () => {
+<<<<<<< Updated upstream
     router.push('/game-page');
+=======
+    router.push('/protected/game');
+>>>>>>> Stashed changes
   };
 
   return (
