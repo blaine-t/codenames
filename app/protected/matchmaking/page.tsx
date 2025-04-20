@@ -69,11 +69,7 @@ function CodenamesPageContent() {
   };
 
   const handleStart = () => {
-<<<<<<< Updated upstream
-    router.push('/game-page');
-=======
     router.push('/protected/game');
->>>>>>> Stashed changes
   };
 
   return (
@@ -82,9 +78,9 @@ function CodenamesPageContent() {
 
       <div className="player-buttons-container">
         {/* Row 1: team headers */}
-        <span className="team-header team-header-red">Red Team</span>
-        <span className="team-header team-header-blue">Blue Team</span>
-        
+        <span className="team-header text-red-600">Red Team</span>
+        <span className="team-header text-blue-600">Blue Team</span>
+
         {/* Rows 2 & 3: four player slots */}
         {[0, 1, 2, 3].map(i => {
           const roleLabel = i < 2 ? 'Spymaster' : 'Field Operative';
@@ -124,9 +120,6 @@ function CodenamesPageContent() {
           Start
         </button>
       </div>
-      <button onClick={handleProfileClick} className="profile-button">
-        Account
-      </button>
     </div>
   );
 }
