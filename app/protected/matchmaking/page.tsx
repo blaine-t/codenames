@@ -3,6 +3,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import "../../globals.css";
+import { createClient } from '@/utils/supabase/client';
 
 function TitleImage({ gameCode }: { gameCode: string }) {
   return (
@@ -74,16 +75,64 @@ function CodenamesPageContent() {
     }
   };
 
-  const handleStart = () => {
-    if (selectedPlayer !== null) {
-      const role = selectedPlayer < 2 ? "Spymaster" : "Operative";
-      const team = selectedPlayer % 2 === 1 ? "blue" : "red";
+  const handleStart = async () => {
+    if (selectedPlayer === null) return;
   
-      localStorage.setItem("playerRole", role);
-      localStorage.setItem("playerTeam", team);
+    const role = selectedPlayer >= 2; // false = Spymaster, true = Operative
+    const teamName = selectedPlayer % 2 === 1 ? "blue" : "red";
   
-      router.push('/protected/game');
+    const supabase = createClient();
+  
+    const {
+      data: { user: authUser },
+      error: authError
+    } = await supabase.auth.getUser();
+  
+    if (authError || !authUser) {
+      console.error("User not authenticated:", authError);
+      return;
     }
+  
+    // Get ID from teamName
+    const { data: teamData, error: teamError } = await supabase
+    .from("Team")
+    .select("id, name")
+    .ilike("name", teamName);
+
+  if (teamError) {
+    console.error("Team fetch error:", teamError);
+    return;
+  }
+
+  if (!teamData || teamData.length === 0) {
+    console.error("No team found for name:", teamName);
+    return;
+  }
+
+  const teamId = teamData[0].id;
+
+    const {data: userData, error: userError} = await supabase
+      .from("User")
+      .select("id")
+      .eq("auth_id", authUser.id)
+      .limit(1)
+      .single()
+    // Upsert
+    const { error: insertError } = await supabase
+      .from("Player")
+      .upsert({
+        user_id: userData?.id,
+        team_id: teamId,
+        is_guesser: role,
+      });
+    
+  
+    if (insertError) {
+      console.error("Failed to insert/update player:", insertError);
+      return;
+    }
+  
+    router.push("/protected/game");
   };
 
   const renderPlayerButtons = () => {
