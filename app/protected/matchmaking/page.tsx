@@ -136,27 +136,44 @@ function CodenamesPageContent() {
   };
 
   const renderPlayerButtons = () => {
-    const buttons = [0, 1, 2, 3];
-    return (
-      <div className="player-buttons-container">
-        {buttons.map((index) => {
-          const label = index < 2 ? "Spymaster" : "Field Operative";
-          const selectedColor = (index % 2 === 1) ? 'blue' : 'red';
-          const customStyle = selectedPlayer === index ? { backgroundColor: selectedColor } : {};
-          return (
-            <PlayerSelectButton
-              key={index}
-              index={index}
-              label={label}
-              selected={selectedPlayer === index}
-              onSelect={handlePlayerSelect}
-              customStyle={customStyle}
-            />
-          );
-        })}
-      </div>
-    );
-  };
+  const teams: { name: string; cssClass: string; indices: number[] }[] = [
+    { name: 'Red Team',  cssClass: 'red-team-group',  indices: [0, 2] },
+    { name: 'Blue Team', cssClass: 'blue-team-group', indices: [1, 3] },
+  ];
+
+  return (
+    <div className="player-teams-container">
+      {teams.map(team => (
+        <div key={team.name} className={`team-group ${team.cssClass}`}>
+          <h2>{team.name}</h2>
+          <div className="player-buttons-container">
+            {team.indices.map(index => {
+              const roleLabel = index < 2 ? 'Spymaster' : 'Field Operative';
+              const customStyle = selectedPlayer === index
+                ? { backgroundColor: team.cssClass.startsWith('red') ? 'red' : 'blue' }
+                : {};
+
+              return (
+                <div className="player-button-wrapper" key={index}>
+                  <PlayerSelectButton
+                    index={index}
+                    selected={selectedPlayer === index}
+                    label={roleLabel}
+                    onSelect={handlePlayerSelect}
+                    customStyle={customStyle}
+                  />
+                  <span className="player-label">Player {index + 1}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+  
 
   return (
     <div className="main-container">
