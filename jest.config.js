@@ -175,7 +175,7 @@ const config = {
 
   // A map from regular expressions to paths to transformers
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { configFile: './babel.config.testing.js' }],
   },
   moduleNameMapper: {
       '^@/(.*)$': '<rootDir>/$1', // Adjust for your alias configuration
