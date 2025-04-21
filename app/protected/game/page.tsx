@@ -28,8 +28,8 @@ export default function GamePage() {
       }
 
       const { data, error } = await supabase
-        .from("player_assignments")
-        .select("role, team")
+        .from("Player")
+        .select("team_id, is_guesser")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1)
@@ -40,8 +40,8 @@ export default function GamePage() {
         return;
       }
 
-      setRole(data.role);
-      setTeam(data.team);
+      setRole(data.is_guesser);
+      setTeam(data.team_id);
       setLoading(false);
     };
 
