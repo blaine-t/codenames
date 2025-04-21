@@ -1,14 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { createClient } from "@/utils/supabase/client";
+import { useUserProfile } from "@/utils/supabase/useUserProfile";
 import "../../globals.css";
 
 export default function SettingsPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("blaine-t");
+  const supabase = createClient();
+  const { profile, loading, error } = useUserProfile();
+
+  const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("/samplePFP.png");
+
+  useEffect(() => {
+    if (profile) {
+      setUsername(profile.username);
+      setProfilePic(profile.image || "/samplePFP.png");
+    }
+  }, [profile]);
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -22,19 +34,53 @@ export default function SettingsPage() {
     }
   };
 
-  const handleSaveChanges = () => {
-    router.push("/protected/account");
-  }
+  const handleSaveChanges = async () => {
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      alert("You must be logged in to update settings.");
+      return;
+    }
+
+    const { error: updateError } = await supabase
+      .from("User")
+      .update({
+        username: username,
+        image: profilePic,
+      })
+      .eq("auth_id", user.id);
+
+    if (updateError) {
+      console.error("Error updating profile:", updateError);
+      alert("Failed to update profile.");
+    } else {
+      router.push("/protected/account");
+    }
+  };
+
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (error) return <p className="text-center text-red-600">Error: {error}</p>;
 
   return (
     <div className="settings-container">
       <div className="settings-section">
         <h2 className="settings-title">Settings</h2>
+
         <div className="profile-settings">
-          <Image src={profilePic} alt="Profile Picture" width={100} height={100} className="profile-pic" />
+          <Image
+            src={profilePic}
+            alt="Profile Picture"
+            width={100}
+            height={100}
+            className="profile-pic"
+          />
           <label>Profile Picture:</label>
           <input type="file" accept="image/*" onChange={handleProfilePicChange} />
         </div>
+
         <div className="username-settings">
           <label>Username:</label>
           <input
@@ -44,13 +90,19 @@ export default function SettingsPage() {
             className="username-input"
           />
         </div>
+
         <div>
           <label>Password:</label>
           <br />
           <br />
-          <a className="action-button" href="/protected/reset-password">Reset your Password</a>
+          <a className="action-button" href="/protected/reset-password">
+            Reset your Password
+          </a>
         </div>
-        <button onClick={handleSaveChanges} className="save-button">Save Changes</button>
+
+        <button onClick={handleSaveChanges} className="save-button">
+          Save Changes
+        </button>
       </div>
     </div>
   );
