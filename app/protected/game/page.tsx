@@ -11,46 +11,65 @@ import StatusBox from "@/components/game/statusBox";
 export default function GamePage() {
   const [role, setRole] = useState<string | null>(null);
   const [team, setTeam] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPlayerData = async () => {
       const supabase = createClient();
 
       const {
-        data: { user },
+        data: { user: authUser },
         error: authError
       } = await supabase.auth.getUser();
 
-      if (authError || !user) {
+      if (authError || !authUser) {
         console.error("User not authenticated");
         return;
       }
 
-      const { data, error } = await supabase
+      const { data: userData, error: userError } = await supabase
+        .from("User")
+        .select("id")
+        .eq("auth_id", authUser.id)
+        .single();
+
+      if (userError || !userData) {
+        console.error("Failed to fetch internal user:", userError);
+        return;
+      }
+
+      const { data: playerData, error: playerError } = await supabase
         .from("Player")
         .select("team_id, is_guesser")
-        .eq("user_id", user.id)
+        .eq("user_id", userData.id)
         .order("created_at", { ascending: false })
         .limit(1)
         .single();
 
-      if (error || !data) {
-        console.error("Failed to fetch player data:", error);
+      if (playerError || !playerData) {
+        console.error("Failed to fetch player data:", playerError);
         return;
       }
 
-      setRole(data.is_guesser);
-      setTeam(data.team_id);
-      setLoading(false);
+      const { data: teamData, error: teamError } = await supabase
+        .from("Team")
+        .select("name")
+        .eq("id", playerData.team_id)
+        .single();
+
+      if (teamError || !teamData) {
+        console.error("Failed to fetch team name:", teamError);
+        return;
+      }
+
+      const readableRole = playerData.is_guesser ? "Field Operative" : "Spymaster";
+      const readableTeam = teamData.name;
+
+      setRole(readableRole);
+      setTeam(readableTeam);
     };
 
     fetchPlayerData();
   }, []);
-
-  if (loading || !role || !team) {
-    return <div>Loading role and team...</div>;
-  }
 
   return (
     <>
