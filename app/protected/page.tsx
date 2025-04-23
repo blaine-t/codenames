@@ -30,7 +30,10 @@ export default function CodenamesPage() {
       setCode(newValue);
     }
   };
-  const handleHostClick = () => router.push(`/protected/matchmaking?code=${9719}`);
+  const handleHostClick = () => {
+    const randomCode = Math.floor(1000 + Math.random() * 9000);
+    router.push(`/protected/matchmaking?code=${randomCode}`);
+  };
 
   return (
     <div className="page-container">
