@@ -179,8 +179,10 @@ const config = {
   },
   moduleNameMapper: {
       '^@/(.*)$': '<rootDir>/$1', // Adjust for your alias configuration
+      '^.+\\.(css|less)$': '<rootDir>/config/CSSStub.js'
   },
   testEnvironment: 'jsdom',
+  setupFiles: ["<rootDir>/.jest/env.js"],
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
