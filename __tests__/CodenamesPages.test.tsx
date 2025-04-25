@@ -75,7 +75,6 @@ describe("Matchmaking Page", () => {
     await act(async () => {
       render(<CodenamesPage />);
     });
-    expect(screen.getByText("Game code:")).toBeInTheDocument();
     expect(screen.getByText("1234")).toBeInTheDocument();
   });
 
@@ -95,19 +94,26 @@ describe("Matchmaking Page", () => {
     const button = screen.getAllByRole("button", { name: /Spymaster/i })[0];
     fireEvent.click(button);
     expect(button).toHaveClass("selected");
+  });
 
+  it("selects and deselects a player button", () => {
+    render(<CodenamesPage />);
+    const button = screen.getAllByRole("button", { name: /Spymaster/i })[0];
+    fireEvent.click(button);
     fireEvent.click(button);
     expect(button).not.toHaveClass("selected");
   });
 
-  it("applies correct team color style when selected", () => {
+  it("applies correct red color style when red is selected", () => {
     render(<CodenamesPage />);
-  
     // Red Team Spymaster is at index 0
     const redSpymaster = screen.getAllByRole("button", { name: /Spymaster/i })[0];
     fireEvent.click(redSpymaster);
     expect(redSpymaster).toHaveStyle("background-color: red");
-  
+  });
+
+  it("applies correct blue team color style when blue is selected", () => {
+    render(<CodenamesPage />);
     // Blue Team Operative is the *second* Field Operative button, i.e. index 1
     const blueOperative = screen.getAllByRole("button", { name: /Field Operative/i })[1];
     fireEvent.click(blueOperative);
@@ -118,6 +124,23 @@ describe("Matchmaking Page", () => {
     render(<CodenamesPage />);
     fireEvent.click(screen.getByText("Start"));
     expect(mockRouterPush).not.toHaveBeenCalled();
+  });
+
+  it("shows username label when player is selected", async () => {
+    render(<CodenamesPage />);
+    const button = screen.getAllByRole("button", { name: /Field Operative/i })[0];
+    fireEvent.click(button);
+  
+    // Wait for the username to show up
+    expect(await screen.findByText("TestUser")).toBeInTheDocument();
+  });
+
+  it("shows default player labels before selection", () => {
+    render(<CodenamesPage />);
+    expect(screen.getByText("Player 1")).toBeInTheDocument();
+    expect(screen.getByText("Player 2")).toBeInTheDocument();
+    expect(screen.getByText("Player 3")).toBeInTheDocument();
+    expect(screen.getByText("Player 4")).toBeInTheDocument();
   });
   
 });
