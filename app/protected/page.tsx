@@ -46,12 +46,13 @@ export default function CodenamesPage() {
           value={code}
           onChange={handleCodeChange}
           className="code-input"
+          data-testid="code-input"
         />
-        <button className='action-button' onClick={handleJoinClick}>Join</button>
+        <button className='action-button' onClick={handleJoinClick} data-testid={"join-button"}>Join</button>
       </div>
 
       <div className="host-section">
-        <button className='action-button' onClick={handleHostClick}>Host</button>
+        <button className='action-button' onClick={handleHostClick} data-testid={"host-button"}>Host</button>
       </div>
     </div>
   );

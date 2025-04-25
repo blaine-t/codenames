@@ -249,7 +249,7 @@ function CodenamesPageContent() {
         />
       </div>
       <div className="start-button-container">
-        <button onClick={handleStart} className="start-button">
+        <button onClick={handleStart} className="start-button" data-testid={"start-button"}>
           Start
         </button>
       </div>

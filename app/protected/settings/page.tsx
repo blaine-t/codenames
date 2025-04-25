@@ -61,6 +61,10 @@ export default function SettingsPage() {
     }
   };
 
+  const handleResetPassword = () => {
+    router.push("/protected/reset-password")
+  }
+
   if (loading) return <p className="text-center mt-10">Loading...</p>;
   if (error) return <p className="text-center text-red-600">Error: {error}</p>;
 
@@ -85,7 +89,6 @@ export default function SettingsPage() {
           <label>Username:</label>
           <input
             type="text"
-            value={username}
             onChange={handleUsernameChange}
             className="username-input"
           />
@@ -95,12 +98,12 @@ export default function SettingsPage() {
           <label>Password:</label>
           <br />
           <br />
-          <a className="action-button" href="/protected/reset-password">
+          <a className="action-button" onClick={handleResetPassword} data-testid="reset-password-button">
             Reset your Password
           </a>
         </div>
 
-        <button onClick={handleSaveChanges} className="save-button">
+        <button onClick={handleSaveChanges} className="save-button" data-testid="save-button">
           Save Changes
         </button>
       </div>

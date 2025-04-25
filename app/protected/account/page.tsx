@@ -37,7 +37,7 @@ export default function AccountPage() {
         <p>Wins: {profile.wins}</p>
         <p>Losses: {profile.losses}</p>
         <p>ELO: {profile.elo}</p>
-        <button className="settings-button" onClick={handleSettings}>
+        <button className="settings-button" data-testid="settings-button" onClick={handleSettings}>
           ⚙️ Settings
         </button>
       </div>

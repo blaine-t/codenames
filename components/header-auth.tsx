@@ -60,7 +60,7 @@ export default async function AuthButton({ pathname }: { pathname: string }) {
       <div className="flex items-center gap-4">
         Hey, {user.email}!
         {showAccountButton && <form action={accountAction}>
-          <Button type="submit" variant={"outline"}>
+          <Button type="submit" variant={"outline"} data-testid={"accountButton"}>
             Account
           </Button>
         </form>}
