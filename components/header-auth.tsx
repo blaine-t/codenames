@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
-import { headers } from "next/headers";
 
 export default async function AuthButton({ pathname }: { pathname: string }) {
   const supabase = await createClient();
@@ -54,7 +53,7 @@ export default async function AuthButton({ pathname }: { pathname: string }) {
   return user ? (
     <>
       {showBackButton && <form action={backAction}>
-        <Button style={{ backgroundColor: "lightgray" }} className="back-button" type="submit" variant={"outline"}>
+        <Button style={{ backgroundColor: "lightgray" }} className="back-button" type="submit" variant={"outline"} data-testid={"backButton"}>
           ← Back
         </Button>
       </form>}
