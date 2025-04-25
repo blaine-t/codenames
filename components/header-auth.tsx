@@ -10,7 +10,6 @@ export default async function AuthButton({ pathname }: { pathname: string }) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  console.log(pathname)
   const showBackButton = pathname !== "/protected"; 
   const showAccountButton = pathname !== '/protected/account';
 
@@ -53,14 +52,14 @@ export default async function AuthButton({ pathname }: { pathname: string }) {
   return user ? (
     <>
       {showBackButton && <form action={backAction}>
-        <Button style={{ backgroundColor: "lightgray" }} className="back-button" type="submit" variant={"outline"} data-testid={"backButton"}>
+        <Button style={{ backgroundColor: "lightgray" }} className="back-button" type="submit" variant={"outline"} data-testid={"back-button"}>
           ← Back
         </Button>
       </form>}
       <div className="flex items-center gap-4">
         Hey, {user.email}!
         {showAccountButton && <form action={accountAction}>
-          <Button type="submit" variant={"outline"} data-testid={"accountButton"}>
+          <Button type="submit" variant={"outline"} data-testid={"account-button"}>
             Account
           </Button>
         </form>}
@@ -72,6 +71,7 @@ export default async function AuthButton({ pathname }: { pathname: string }) {
               color: "white",
               backgroundColor: "rgb(239 68 68 / var(--tw-bg-opacity, 1))",
             }}
+            data-testid={"signout-button"}
           >
             Sign out
           </Button>

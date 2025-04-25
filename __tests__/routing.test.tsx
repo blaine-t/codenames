@@ -4,13 +4,24 @@ import { render, screen, act, fireEvent } from '@testing-library/react'
 import ProtectedPage from '@/app/protected/page'
 import AccountPage from '@/app/protected/account/page'
 import SettingsPage from '@/app/protected/settings/page'
+import AuthButton from '@/components/header-auth'
+import { redirect } from 'next/navigation'
+
+const testUser = {
+    data: { id: 'user123', email: 'test@example.com', name: 'Test User' },
+    error: null,
+};
 
 const mockedUseRouter = {
     push: jest.fn(),
 };
 
 jest.mock('next/navigation', () => ({
+    // Since this has push we need a seperate variable to check in tests
     useRouter: jest.fn(() => mockedUseRouter),
+    // Since this is flat we can just import redirect and use it in our tests
+    redirect: jest.fn(),
+    // Hardcode the code to be 1234
     useSearchParams: jest.fn(() => new URLSearchParams('code=1234')),
 }));
 
@@ -22,51 +33,50 @@ jest.mock('@/utils/supabase/useUserProfile', () => ({
     })),
 }));
 
-jest.mock('@/utils/supabase/client', () => ({
-    createClient: jest.fn(() => ({
-        auth: {
-            getUser: jest.fn(() => ({
-                data: { user: { id: 'user123', email: 'test@example.com' } },
-                error: null,
-            })),
-        },
-        from: jest.fn(() => ({
+// There's got to be a better way to do this but for now this is the DRYest I can get it
+const mockSupabaseClient = {
+    auth: {
+        getUser: jest.fn(() => ({
+            data: { user: { id: 'user123', email: 'test@example.com' } },
+            error: null,
+        })),
+        signOut: jest.fn().mockReturnThis()
+    },
+    from: jest.fn(() => {
+        
+        return {
             select: jest.fn().mockReturnThis(),
             insert: jest.fn().mockReturnThis(),
             update: jest.fn(() => ({
                 eq: jest.fn(() => ({
                     status: "204",
-                    statusText: "No Content"
+                    statusText: "No Content",
                 })),
-                single: jest.fn(() => ({
-                    data: { id: 'user123', email: 'test@example.com', name: 'Test User' },
-                    error: null,
-                })),
-                then: jest.fn((callback) => callback({ data: { id: 'user123', email: 'test@example.com', name: 'Test User' }, error: null })),
+                single: jest.fn(() => testUser),
+                then: jest.fn((callback) => callback(testUser)),
             })),
             delete: jest.fn().mockReturnThis(),
             eq: jest.fn(() => ({
-                single: jest.fn(() => ({
-                    data: { id: 'user123', email: 'test@example.com', name: 'Test User' },
-                    error: null,
-                })),
+                single: jest.fn(() => testUser),
                 limit: jest.fn().mockReturnThis(),
             })),
-            single: jest.fn(() => ({
-                data: { id: 'user123', email: 'test@example.com', name: 'Test User' },
-                error: null,
-            })),
+            single: jest.fn(() => testUser),
             upsert: jest.fn(() => ({
                 eq: jest.fn(() => ({
-                    single: jest.fn(() => ({
-                        data: { id: 'user123', email: 'test@example.com', name: 'Test User' },
-                        error: null,
-                    })),
+                    single: jest.fn(() => testUser),
                 })),
             })),
-            then: jest.fn((callback) => callback({ data: { id: 'user123', email: 'test@example.com', name: 'Test User' }, error: null })),
-        })),
-    })),
+            then: jest.fn((callback) => callback(testUser)),
+        };
+    }),
+};
+
+jest.mock('@/utils/supabase/client', () => ({
+    createClient: jest.fn(() => mockSupabaseClient),
+}));
+
+jest.mock('@/utils/supabase/server', () => ({
+    createClient: jest.fn(() => mockSupabaseClient),
 }));
 
 describe('ProtectedPage', () => {
@@ -77,10 +87,10 @@ describe('ProtectedPage', () => {
         const codeInput = await screen.findByTestId('code-input')
         fireEvent.change(codeInput, { target: { value: '1234' } })
 
+        // This is how you click a button
         const joinButton = await screen.findByTestId('join-button')
-        fireEvent.click(joinButton)
+        await act(async () => fireEvent.click(joinButton))
         
-        // Since there is a query param we need to use regex
         expect(mockedUseRouter.push).toHaveBeenCalledWith('/protected/matchmaking?code=1234')
     })
     
@@ -88,7 +98,7 @@ describe('ProtectedPage', () => {
         await act(() => render(<ProtectedPage />))
         
         const hostButton = await screen.findByTestId('host-button')
-        fireEvent.click(hostButton)
+        await act(async () => fireEvent.click(hostButton))
         
         // Since there is a query param we need to use regex
         expect(mockedUseRouter.push).toHaveBeenCalledWith(expect.stringMatching(/^\/protected\/matchmaking\?code=\d{4}$/))
@@ -100,7 +110,7 @@ describe('AccountPage', () => {
         await act(() => render(<AccountPage />))
 
         const settingsButton = await screen.findByTestId('settings-button')
-        fireEvent.click(settingsButton)
+        await act(async () => fireEvent.click(settingsButton))
         
         expect(mockedUseRouter.push).toHaveBeenCalledWith('/protected/settings')
     })
@@ -111,7 +121,7 @@ describe('SettingsPage', () => {
         await act(() => render(<SettingsPage />))
         
         const resetPasswordButton = await screen.findByTestId('reset-password-button')
-        fireEvent.click(resetPasswordButton)
+        await act(async () => fireEvent.click(resetPasswordButton))
         
         expect(mockedUseRouter.push).toHaveBeenCalledWith('/protected/reset-password')
     })
@@ -120,11 +130,39 @@ describe('SettingsPage', () => {
         await act(() => render(<SettingsPage />))
         
         const saveButton = await screen.findByTestId('save-button')
-        fireEvent.click(saveButton)
-        
-        // Add to give delay for test to work
-        await screen.findByTestId('save-button')
+        await act(async () => fireEvent.click(saveButton))
 
         expect(mockedUseRouter.push).toHaveBeenCalledWith('/protected/account')
+    })
+})
+
+// Header is a server side rendered component so 
+// things get a little different compared to the other tests
+describe('Header', () => {
+    it('Header Back button takes you to /protected', async () => {
+        await act(async () => render(await AuthButton({ pathname: '' })))
+      
+        const backButton = await screen.findByTestId('back-button')
+        await act(async () => fireEvent.click(backButton))
+
+        expect(redirect).toHaveBeenCalledWith('/protected')
+    })
+
+    it('Header Account button takes you to /protected/account', async () => {
+        await act(async () => render(await AuthButton({ pathname: '' })))
+      
+        const accountButton = await screen.findByTestId('account-button')
+        await act(async () => fireEvent.click(accountButton))
+
+        expect(redirect).toHaveBeenCalledWith('/protected/account')
+    })
+
+    it('Header Sign Out button takes you to /sign-in', async () => {
+        await act(async () => render(await AuthButton({ pathname: '' })))
+      
+        const signOutButton = await screen.findByTestId('signout-button')
+        await act(async () => fireEvent.click(signOutButton))
+
+        expect(redirect).toHaveBeenCalledWith('/sign-in')
     })
 })
