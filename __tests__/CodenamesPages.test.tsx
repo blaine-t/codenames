@@ -1,35 +1,67 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import CodenamesPage from "../app/protected/matchmaking/page";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom';
 
 // Mocks
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
   useSearchParams: jest.fn(() => new URLSearchParams("code=1234")),
 }));
-
 jest.mock("@/utils/supabase/client", () => ({
   createClient: jest.fn(),
 }));
 
-// Setup dummy Supabase behavior
 const mockRouterPush = jest.fn();
 
+// A single, unified from-mock that returns the right methods for each table
 const mockSupabase = {
   auth: {
-    getUser: jest.fn(() => Promise.resolve({ data: { user: { id: "auth123" } } })),
+    getUser: jest.fn(() =>
+      Promise.resolve({ data: { user: { id: "auth123" } }, error: null })
+    ),
   },
-  from: jest.fn(() => ({
-    select: jest.fn().mockReturnThis(),
-    eq: jest.fn().mockReturnThis(),
-    limit: jest.fn().mockReturnThis(),
-    single: jest.fn().mockReturnThis(),
-    update: jest.fn().mockReturnThis(),
-    upsert: jest.fn().mockReturnThis(),
-  })),
+  from: jest.fn((table: string) => {
+    if (table === "Team") {
+      // handle supabase.from("Team").select(...).ilike(...)
+      return {
+        select: () => ({
+          ilike: (_col: string, _val: string) =>
+            Promise.resolve({ data: [{ id: 1, name: "red" }], error: null }),
+        }),
+      };
+    }
+
+    // for both "User" and "Player", which both call .select().eq() and then either .single() or .limit().single()
+    return {
+      select: () => ({
+        eq: () => ({
+          // .single() for fetching the current user’s username or id
+          single: () =>
+            Promise.resolve({
+              data: table === "User"
+                ? { id: 42, username: "TestUser" }
+                : [{ /* other players */ }],
+              error: null,
+            }),
+          // .limit(...).single() for the Player upsert fetch
+          limit: (_n: number) => ({
+            single: () =>
+              Promise.resolve({
+                data: { id: 42, username: "TestUser" },
+                error: null,
+              }),
+          }),
+        }),
+      }),
+      upsert: () => Promise.resolve({ error: null }),
+      update: () => ({
+        eq: () => Promise.resolve({ error: null }),
+      }),
+    };
+  }),
 };
 
 beforeEach(() => {
@@ -38,23 +70,54 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe('Page', () => {
-    it('contains a game code', () => {
-      render(<CodenamesPage />)
+describe("Matchmaking Page", () => {
+  it("contains and displays the game code from URL", async () => {
+    await act(async () => {
+      render(<CodenamesPage />);
+    });
+    expect(screen.getByText("Game code:")).toBeInTheDocument();
+    expect(screen.getByText("1234")).toBeInTheDocument();
+  });
+
+  it("renders team headings and exactly four player buttons", () => {
+    render(<CodenamesPage />);
+    expect(screen.getByText("Red Team")).toBeInTheDocument();
+    expect(screen.getByText("Blue Team")).toBeInTheDocument();
+
+    const spymasters = screen.getAllByRole("button", { name: /Spymaster/i });
+    const operatives = screen.getAllByRole("button", { name: /Field Operative/i });
+    expect(spymasters).toHaveLength(2);
+    expect(operatives).toHaveLength(2);
+  });
+
+  it("selects and deselects a player button", () => {
+    render(<CodenamesPage />);
+    const button = screen.getAllByRole("button", { name: /Spymaster/i })[0];
+    fireEvent.click(button);
+    expect(button).toHaveClass("selected");
+
+    fireEvent.click(button);
+    expect(button).not.toHaveClass("selected");
+  });
+
+  it("applies correct team color style when selected", () => {
+    render(<CodenamesPage />);
   
-      const codeVar = screen.getByText("Game code:")
+    // Red Team Spymaster is at index 0
+    const redSpymaster = screen.getAllByRole("button", { name: /Spymaster/i })[0];
+    fireEvent.click(redSpymaster);
+    expect(redSpymaster).toHaveStyle("background-color: red");
   
-      expect(codeVar).toBeInTheDocument()
-    })
-  })
+    // Blue Team Operative is the *second* Field Operative button, i.e. index 1
+    const blueOperative = screen.getAllByRole("button", { name: /Field Operative/i })[1];
+    fireEvent.click(blueOperative);
+    expect(blueOperative).toHaveStyle("background-color: blue");
+  });
 
-test("selects and deselects a player button", () => {
-  render(<CodenamesPage />);
-
-  const button = screen.getAllByRole("button", { name: /Spymaster/i })[0];
-  fireEvent.click(button);
-  expect(button.className).toContain("selected");
-
-  fireEvent.click(button);
-  expect(button.className).not.toContain("selected");
+  it("does not navigate on Start if no player selected", () => {
+    render(<CodenamesPage />);
+    fireEvent.click(screen.getByText("Start"));
+    expect(mockRouterPush).not.toHaveBeenCalled();
+  });
+  
 });
