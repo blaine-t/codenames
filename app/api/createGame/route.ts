@@ -1,3 +1,6 @@
+import CreateGameJson from "@/types/createGameJson";
+import { createClient } from "@/utils/supabase/server";
+
 import { generate } from "random-words"
 
 enum Allegiance {
@@ -24,7 +27,7 @@ function shuffle(array: any[]) {
     }
 }
 
-export async function POST(req: Request) {
+function generateBoard() {
     const words = generate({ minLength: 3, maxLength: 7, exactly: 25 }) as string[]
     const allegiances = [
         ...Array(8).fill(Allegiance.Blue),
@@ -42,5 +45,34 @@ export async function POST(req: Request) {
         }
     })
 
-    return Response.json(board)
+    return board
+}
+
+export async function POST(req: Request) {
+    const supabase = await createClient()
+
+    // Get data from the client
+    const { game_code, team1_id, team2_id, turn_time } = await req.json() as CreateGameJson
+
+    const board = generateBoard()
+
+    const { error: upsertError } = await supabase.from("Game").upsert({
+        team1_id,
+        team2_id,
+        board,
+        turn_time,
+        game_code
+    }, { onConflict: "game_code" })
+
+    if (upsertError) {
+        console.error("Failed to insert/update game:", upsertError);
+        return new Response("Failed to insert/update game", {status: 500});
+      }
+
+    return new Response(null, {
+        status: 307,
+        headers: {
+            Location: `/protected/game?code=${game_code}`
+        }
+    });
 }
