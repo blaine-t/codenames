@@ -59,6 +59,27 @@ function CodenamesPageContent() {
 
   const supabase = createClient();
 
+  useEffect(() => {
+
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "Game",
+          filter: `game_code=eq.${gameCode}`,
+        },
+        (payload) => {
+          console.log("Game started:", payload);
+          // Check if the inserted game matches the current game code
+          router.push(`/protected/game?code=${gameCode}`);
+        }
+      )
+      .subscribe()
+  }, []);
+
   // Hide scrollbars
   useEffect(() => {
     const orig = document.body.style.overflow;
