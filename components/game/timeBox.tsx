@@ -4,13 +4,17 @@ import styles from './TimeBox.module.css';
 import { useEffect, useState } from 'react';
 
 interface TimeBoxProps {
-  seconds: number;
+  seconds: number | null;
 }
 
 export default function Card({ seconds }: TimeBoxProps) {
-  const [time, setTime] = useState(seconds);
+  const [time, setTime] = useState(seconds || 60);
 
   useEffect(() => {
+    if (seconds == null) {
+      return
+    }
+    setTime(seconds)
     const timer = setInterval(() => {
       setTime((prevTime) => {
         if (prevTime <= 1) {
@@ -21,7 +25,7 @@ export default function Card({ seconds }: TimeBoxProps) {
       });
     }, 1000);
     return () => clearInterval(timer);
-  });
+  }, [seconds]);
   
   const minutes = Math.floor(time / 60).toString();
   const displaySeconds = (time % 60).toString().padStart(2, '0');

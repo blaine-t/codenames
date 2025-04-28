@@ -1,6 +1,6 @@
 "use client"
 import { createClient } from "@/utils/supabase/client";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import "../../globals.css";
 import CardGrid from "@/components/game/cardGrid";
@@ -8,13 +8,25 @@ import TimeBox from "@/components/game/timeBox";
 import RoleBox from "@/components/game/roleBox";
 import StatusBox from "@/components/game/statusBox";
 
+type board = {
+  word: string;
+  allegiance: any;
+  guessed: boolean;
+}
+
 export default function GamePage() {
+  const searchParams = useSearchParams();
+  const gameCode = searchParams.get("code") || "";
+
+  const supabase = createClient();
+
   const [role, setRole] = useState<string | null>(null);
   const [team, setTeam] = useState<string | null>(null);
+  const [turnTime, setTurnTime] = useState<number | null>(null);
+  const [board, setBoard] = useState<board | null>(null);
 
   useEffect(() => {
     const fetchPlayerData = async () => {
-      const supabase = createClient();
 
       const {
         data: { user: authUser },
@@ -42,7 +54,6 @@ export default function GamePage() {
         .select("team_id, is_guesser")
         .eq("user_id", userData.id)
         .order("created_at", { ascending: false })
-        .limit(1)
         .single();
 
       if (playerError || !playerData) {
@@ -71,9 +82,23 @@ export default function GamePage() {
     fetchPlayerData();
   }, []);
 
+  useEffect(() => {
+    const fetchGameData = async () => {
+      const { data: gameData, error: gameError } = await supabase
+        .from("Game")
+        .select("board, turn_time")
+        .eq("game_code", gameCode)
+        .single();
+      
+      setBoard(gameData?.board)
+      setTurnTime(gameData?.turn_time)
+    }
+    fetchGameData()
+  })
+
   return (
     <>
-      <TimeBox seconds={90} />
+      <TimeBox seconds={turnTime} />
       <div className="table">
         <RoleBox role={`${role} (${team})`} />
         <CardGrid />
