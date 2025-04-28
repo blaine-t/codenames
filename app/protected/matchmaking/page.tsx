@@ -23,6 +23,18 @@ function TitleImage({ gameCode }: { gameCode: string }) {
   );
 }
 
+type PlayerInfo = {
+  User: {
+    username: string;
+    image: string | null;
+  } | null;
+  Team: {
+    id: number;
+    name: string;
+  } | null;
+  is_guesser: boolean;
+};
+
 type PlayerSelectButtonProps = {
   index: number;
   selected: boolean;
@@ -58,7 +70,7 @@ function CodenamesPageContent() {
   const [username, setUsername] = useState<string | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
   const [turnTime, setTurnTime] = useState<number>(60);
-  const [players, setPlayers] = useState<string[]>([]);
+  const [players, setPlayers] = useState<string[]>(["Player 1", "Player 2", "Player 3", "Player 4"]);
 
   const supabase = createClient();
 
@@ -94,6 +106,7 @@ function CodenamesPageContent() {
           filter: `game_code=eq.${gameCode}`,
         },
         async () => {
+          // https://stackoverflow.com/a/75224812
           const { data: playerRecord, error: playerError } = await supabase
             .from("Player")
             .select(
@@ -104,12 +117,27 @@ function CodenamesPageContent() {
               `
             )
             .eq("game_code", gameCode)
-            .order('is_guesser', { ascending: true})
-            .order('Team (id)', { ascending: true })
+            .returns<PlayerInfo[]>()
             .limit(4)
-          if (playerRecord) {
-            setPlayers(playerRecord.map((x: any) => x.User?.username || ""));
+          const playersTemp = ["Player 1", "Player 2", "Player 3", "Player 4"]
+          // There's a better way to do this but not with how we have this architected
+          const player1 = playerRecord?.find((x) => !x.is_guesser && x?.Team?.id === 1)?.User?.username
+          const player2 = playerRecord?.find((x) => !x.is_guesser && x?.Team?.id === 2)?.User?.username
+          const player3 = playerRecord?.find((x) => x.is_guesser && x?.Team?.id === 1)?.User?.username
+          const player4 = playerRecord?.find((x) => x.is_guesser && x?.Team?.id === 2)?.User?.username
+          if (player1) {
+            playersTemp[0] = player1
           }
+          if (player2) {
+            playersTemp[1] = player2
+          }
+          if (player3) {
+            playersTemp[2] = player3
+          }
+          if (player4) {
+            playersTemp[3] = player4
+          }
+          setPlayers(playersTemp)
         }
       )
       .subscribe();
@@ -265,9 +293,7 @@ function CodenamesPageContent() {
                       customStyle={customStyle}
                     />
                     <span className="player-label">
-                      {selectedPlayer === index && username
-                        ? username
-                        : `Player ${index + 1}`}
+                      {players[index]}
                     </span>
                   </div>
                 );
