@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { createClient } from "@/utils/supabase/client";
 import { redirect, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import "../../globals.css";
 import CardGrid from "@/components/game/cardGrid";
 import TimeBox from "@/components/game/timeBox";
@@ -12,9 +12,9 @@ type board = {
   word: string;
   allegiance: any;
   guessed: boolean;
-}
+};
 
-export default function GamePage() {
+function GameContent() {
   const searchParams = useSearchParams();
   const gameCode = searchParams.get("code") || "";
 
@@ -27,10 +27,9 @@ export default function GamePage() {
 
   useEffect(() => {
     const fetchPlayerData = async () => {
-
       const {
         data: { user: authUser },
-        error: authError
+        error: authError,
       } = await supabase.auth.getUser();
 
       if (authError || !authUser) {
@@ -72,7 +71,9 @@ export default function GamePage() {
         return;
       }
 
-      const readableRole = playerData.is_guesser ? "Field Operative" : "Spymaster";
+      const readableRole = playerData.is_guesser
+        ? "Field Operative"
+        : "Spymaster";
       const readableTeam = teamData.name;
 
       setRole(readableRole);
@@ -89,12 +90,12 @@ export default function GamePage() {
         .select("board, turn_time")
         .eq("game_code", gameCode)
         .single();
-      
-      setBoard(gameData?.board)
-      setTurnTime(gameData?.turn_time)
-    }
-    fetchGameData()
-  })
+
+      setBoard(gameData?.board);
+      setTurnTime(gameData?.turn_time);
+    };
+    fetchGameData();
+  });
 
   return (
     <>
@@ -105,5 +106,13 @@ export default function GamePage() {
         <StatusBox clue="green" guesses={5} guessesLeft={6} />
       </div>
     </>
+  );
+}
+
+export default function GamePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <GameContent />
+    </Suspense>
   );
 }
