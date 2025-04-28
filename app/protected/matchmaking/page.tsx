@@ -58,13 +58,14 @@ function CodenamesPageContent() {
   const [username, setUsername] = useState<string | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
   const [turnTime, setTurnTime] = useState<number>(60);
+  const [players, setPlayers] = useState<string[]>([]);
 
   const supabase = createClient();
 
   // Enable netcode for checking if the game has been started
   useEffect(() => {
     supabase
-      .channel('schema-db-changes')
+      .channel("schema-db-changes")
       .on(
         "postgres_changes",
         {
@@ -77,7 +78,41 @@ function CodenamesPageContent() {
           router.push(`/protected/game?code=${gameCode}`);
         }
       )
-      .subscribe()
+      .subscribe();
+  }, []);
+
+  // Enable netcode for checking if players have selected their positions
+  useEffect(() => {
+    supabase
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "Player",
+          filter: `game_code=eq.${gameCode}`,
+        },
+        async () => {
+          const { data: playerRecord, error: playerError } = await supabase
+            .from("Player")
+            .select(
+              `
+              User (username, image),
+              Team (id, name),
+              is_guesser
+              `
+            )
+            .eq("game_code", gameCode)
+            .order('is_guesser', { ascending: true})
+            .order('Team (id)', { ascending: true })
+            .limit(4)
+          if (playerRecord) {
+            setPlayers(playerRecord.map((x: any) => x.User?.username || ""));
+          }
+        }
+      )
+      .subscribe();
   }, []);
 
   // Hide scrollbars
@@ -144,15 +179,15 @@ function CodenamesPageContent() {
       game_code: parseInt(gameCode),
       team1_id: 1,
       team2_id: 2,
-      turn_time: turnTime
-    }
+      turn_time: turnTime,
+    };
     // https://stackoverflow.com/a/71927511
-    await fetch('/api/createGame', { 
-      method: 'POST',
-      mode: 'cors',
-      body: JSON.stringify(data)
-    })
-  }
+    await fetch("/api/createGame", {
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify(data),
+    });
+  };
 
   useEffect(() => {
     const updatePlayer = async () => {
@@ -179,22 +214,23 @@ function CodenamesPageContent() {
 
       const teamId = teamData[0].id;
 
-      const { error: upsertError } = await supabase
-        .from("Player")
-        .upsert({
+      const { error: upsertError } = await supabase.from("Player").upsert(
+        {
           user_id: userId,
           game_code: gameCode,
           is_guesser: role,
           team_id: teamId,
-        }, { onConflict: "user_id" })
+        },
+        { onConflict: "user_id" }
+      );
 
       if (upsertError) {
         console.error("Failed to update player:", upsertError);
         return;
       }
-    }
-    updatePlayer()
-  }, [selectedPlayer])
+    };
+    updatePlayer();
+  }, [selectedPlayer]);
 
   const renderPlayerButtons = () => {
     const teams = [
@@ -259,7 +295,11 @@ function CodenamesPageContent() {
         />
       </div>
       <div className="start-button-container">
-        <button onClick={handleGameStart} className="start-button" data-testid={"start-button"}>
+        <button
+          onClick={handleGameStart}
+          className="start-button"
+          data-testid={"start-button"}
+        >
           Start
         </button>
       </div>
