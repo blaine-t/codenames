@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import "../../globals.css";
 import { createClient } from "@/utils/supabase/client";
-import CreateGameJson from "@/types/createGameJson";
+import CreateGameJson from "@/types/CreateGameJson";
 
 function TitleImage({ gameCode }: { gameCode: string }) {
   return (

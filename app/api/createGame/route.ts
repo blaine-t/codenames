@@ -1,4 +1,4 @@
-import CreateGameJson from "@/types/createGameJson";
+import CreateGameJson from "@/types/CreateGameJson";
 import { createClient } from "@/utils/supabase/server";
 
 import { generate } from "random-words"
