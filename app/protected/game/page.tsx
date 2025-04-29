@@ -95,7 +95,7 @@ function GameContent() {
       setTurnTime(gameData?.turn_time);
     };
     fetchGameData();
-  });
+  }, []);
 
   return (
     <>
