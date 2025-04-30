@@ -4,10 +4,11 @@ interface CardProps {
   handleClick: any;
   id: number;
   word: string;
+  covered: boolean;
   role?: string;
 }
 
-export default function Card({ handleClick, id, word, role="" }: CardProps) {
+export default function Card({ handleClick, id, word, covered, role="" }: CardProps) {
 
   let roleStyle = ""
   let textHint = ""
@@ -34,10 +35,11 @@ export default function Card({ handleClick, id, word, role="" }: CardProps) {
       break
   }
 
+  const coveredStyle = covered ? styles.covered : ""
   return (
-    <div onClick={() => handleClick(id)} className={[styles.card, roleStyle].join(" ")}>
+    <div onClick={!covered ? () => handleClick(id) : () => {}} className={[styles.card, roleStyle, coveredStyle].join(" ")}>
         {textHint !== "" && <p className={styles.textHint}>{textHint}</p>}
-        <button className={styles.cardButton}>{word}</button>
+        <div className={[styles.cardButton, roleStyle, coveredStyle].join(" ")}>{word}</div>
     </div>
   );
 }
