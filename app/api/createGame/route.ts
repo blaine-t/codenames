@@ -54,7 +54,16 @@ export async function POST(req: Request) {
 
     const board = generateBoard(team1_id, team2_id)
 
+    const { data: playerData } = await supabase.from("Player")
+            .select("id")
+            .eq("team_id", team1_id)
+            .eq("is_guesser", false)
+            .eq("game_code", game_code)
+            .single()
+    const selected_player_id = playerData?.id
+
     const { error: upsertError } = await supabase.from("Game").upsert({
+        selected_player_id,
         team1_id,
         team2_id,
         board,
