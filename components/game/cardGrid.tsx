@@ -26,7 +26,7 @@ export default function CardGrid({ isGuesser, board, handleClick }: CardGridProp
                 }
                 let covered = card.guessed
                 return (
-                    <Card handleClick={handleClick} id={id} word={card.word} role={role} covered={covered} />
+                    <Card handleClick={handleClick} key={id} id={id} word={card.word} role={role} covered={covered} />
                 )
             })}
         </div>
