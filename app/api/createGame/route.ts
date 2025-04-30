@@ -3,6 +3,9 @@ import { createClient } from "@/utils/supabase/server";
 
 import { generate } from "random-words"
 
+const CARDS_TEAM1 = 9
+const CARDS_TEAM2 = 8
+
 // https://stackoverflow.com/a/2450976
 function shuffle(array: any[]) {
     let currentIndex = array.length;
@@ -23,8 +26,8 @@ function shuffle(array: any[]) {
 function generateBoard(team1_id: number, team2_id: number) {
     const words = generate({ minLength: 3, maxLength: 7, exactly: 25 }) as string[]
     const team_ids = [
-        ...Array(8).fill(team1_id),
-        ...Array(7).fill(team2_id),
+        ...Array(CARDS_TEAM1).fill(team1_id),
+        ...Array(CARDS_TEAM2).fill(team2_id),
         // Bystander
         ...Array(9).fill(0),
         // Assassin
@@ -75,6 +78,13 @@ export async function POST(req: Request) {
         console.error("Failed to insert/update game:", upsertError);
         return new Response("Failed to insert/update game", {status: 500});
       }
+    
+    await supabase.from("Team")
+      .update({cards_remaining: CARDS_TEAM1})
+      .eq("id", team1_id)
+    await supabase.from("Team")
+      .update({cards_remaining: CARDS_TEAM2})
+      .eq("id", team2_id)
 
     return new Response(null, {
         status: 307,
