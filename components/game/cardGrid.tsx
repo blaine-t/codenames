@@ -6,9 +6,10 @@ interface CardGridProps {
     isGuesser: boolean;
     board: Board[] | null;
     handleClick: any;
+    isSelected: boolean;
 }
 
-export default function CardGrid({ isGuesser, board, handleClick }: CardGridProps) {
+export default function CardGrid({ isGuesser, board, handleClick, isSelected }: CardGridProps) {
     return (
         <div className={styles.cardGrid}>
             {board?.map((card, id) => {
@@ -26,7 +27,7 @@ export default function CardGrid({ isGuesser, board, handleClick }: CardGridProp
                 }
                 let covered = card.guessed
                 return (
-                    <Card handleClick={handleClick} key={id} id={id} word={card.word} role={role} covered={covered} isGuesser={isGuesser} />
+                    <Card handleClick={handleClick} key={id} id={id} word={card.word} role={role} covered={covered} isGuesser={isGuesser} isSelected={isSelected} />
                 )
             })}
         </div>

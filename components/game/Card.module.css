@@ -11,7 +11,7 @@
   cursor: pointer;
 }
 
-.card.isNotGuesser {
+.card.isNotSelected {
     cursor: default;
 }
 
