@@ -1,47 +1,47 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
+import { useEffect, useState } from 'react'
+import { createClient } from '@/utils/supabase/client'
 
 export interface UserProfile {
-  username: string;
-  wins: number;
-  losses: number;
-  elo: number;
-  image: string | null;
+  username: string
+  wins: number
+  losses: number
+  elo: number
+  image: string | null
 }
 
 export function useUserProfile() {
-  const supabase = createClient();
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const supabase = createClient()
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchProfile = async () => {
-      setLoading(true);
+      setLoading(true)
 
       const {
         data: { user },
         error: authError,
-      } = await supabase.auth.getUser();
+      } = await supabase.auth.getUser()
 
       if (authError || !user) {
-        setError("Failed to get user");
-        setLoading(false);
-        return;
+        setError('Failed to get user')
+        setLoading(false)
+        return
       }
 
       const { data, error: profileError } = await supabase
-        .from("User")
-        .select("username, wins, losses, elo, image")
-        .eq("auth_id", user.id)
-        .single();
+        .from('User')
+        .select('username, wins, losses, elo, image')
+        .eq('auth_id', user.id)
+        .single()
 
       if (profileError || !data) {
-        setError("Profile not found");
-        setLoading(false);
-        return;
+        setError('Profile not found')
+        setLoading(false)
+        return
       }
 
       setProfile({
@@ -49,14 +49,14 @@ export function useUserProfile() {
         wins: data.wins,
         losses: data.losses,
         elo: data.elo,
-        image: data.image || "/samplePFP.png",
-      });
+        image: data.image || '/samplePFP.png',
+      })
 
-      setLoading(false);
-    };
+      setLoading(false)
+    }
 
-    fetchProfile();
-  }, [supabase]);
+    fetchProfile()
+  }, [supabase])
 
-  return { profile, loading, error };
+  return { profile, loading, error }
 }

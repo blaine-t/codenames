@@ -12,11 +12,11 @@
 }
 
 .card.isNotSelected {
-    cursor: default;
+  cursor: default;
 }
 
 .card.covered {
-    cursor: default;
+  cursor: default;
 }
 
 .cardButton {

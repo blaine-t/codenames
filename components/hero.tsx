@@ -1,4 +1,4 @@
-import TitleImage from "./titleImage";
+import TitleImage from './titleImage'
 
 export default function Header() {
   return (
@@ -7,5 +7,5 @@ export default function Header() {
         <TitleImage />
       </div>
     </div>
-  );
+  )
 }

@@ -85,7 +85,8 @@
   }
 
   /* Join section and host section styling */
-  .join-section, .host-section {
+  .join-section,
+  .host-section {
     @apply w-full text-center mb-5;
   }
 
@@ -146,41 +147,41 @@
     .account-container {
       @apply flex flex-col items-center justify-center h-screen w-full bg-background text-foreground;
     }
-  
+
     .profile-section {
       @apply flex flex-col items-center bg-card p-6 rounded-lg shadow-lg w-[300px];
     }
-  
+
     .profile-pic {
       @apply rounded-full border-4 border-gray-300;
       width: 100px;
       height: 100px;
     }
-  
+
     .username {
       @apply text-xl font-bold mt-3;
     }
-  
+
     .settings-button {
       @apply mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg cursor-pointer;
     }
-  
+
     .logout-button {
       @apply mt-2 bg-red-500 text-white px-6 py-2 rounded-lg cursor-pointer;
     }
-  
+
     .friends-section {
       @apply mt-6 w-[300px] text-center;
     }
-  
+
     .friends-title {
       @apply text-lg font-bold mb-2;
     }
-  
+
     .friends-list {
       @apply bg-card p-4 rounded-lg shadow-md;
     }
-  
+
     .friend {
       @apply bg-gray-500 text-white px-4 py-2 rounded-lg mb-2;
     }
@@ -190,37 +191,37 @@
     .settings-container {
       @apply flex flex-col items-center justify-center h-screen w-full bg-background text-foreground;
     }
-  
+
     .settings-title {
       @apply text-2xl font-bold mb-4;
     }
-  
+
     .settings-section {
       @apply grid grid-cols-1 gap-6 bg-card p-6 rounded-lg shadow-lg h-[75vh] w-[80vw] items-start;
     }
-  
+
     /* Profile Picture Preview */
     .profile-pic-preview {
       @apply flex border-4 border-gray-300 w-24 h-24 object-cover rounded-full;
     }
-  
+
     /* Profile Picture Input */
-    .profile-settings input[type="file"] {
+    .profile-settings input[type='file'] {
       @apply w-full mt-2;
     }
-  
+
     /* Inputs and Buttons Styling */
     .file-input,
     .username-input,
     .save-button {
       @apply w-full;
     }
-  
+
     /* Specific Input Styling */
     .username-input {
       @apply px-3 py-2 border border-gray-400 rounded-lg text-center mt-2;
     }
-  
+
     /* Save Button Styling */
     .save-button {
       @apply bg-blue-500 text-white px-6 py-2 rounded-lg cursor-pointer mt-4;
@@ -230,7 +231,7 @@
     .action-button {
       @apply bg-foreground text-background px-6 py-2 rounded-lg cursor-pointer;
     }
-  }  
+  }
 }
 
 body {
@@ -244,14 +245,14 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 16px; 
+  gap: 16px;
 }
 
 .main-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
   text-align: center;
 }
 
@@ -266,7 +267,7 @@ body {
   display: flex;
   width: 100vw;
   height: 87vh;
-  background-image: url("/table.jpg");
+  background-image: url('/table.jpg');
   background-size: cover;
   flex-direction: column;
   align-items: center;
@@ -278,7 +279,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url("/background.png");
+  background-image: url('/background.png');
   width: 100vw;
   height: 100vh;
 }
@@ -293,7 +294,6 @@ body {
 .player-teams-container {
   display: flex;
   justify-content: space-between;
-  
 }
 
 .red-team-group h2 {
@@ -342,13 +342,13 @@ body {
 
 .player-label {
   margin-top: 0.25rem;
-  font-size: 1.2rem; 
+  font-size: 1.2rem;
   color: inherit;
 }
 
 @layer components {
   .player-select-button {
-    @apply w-56 h-16;  /* 14rem wide (224px) × 4rem tall (64px) */
+    @apply w-56 h-16; /* 14rem wide (224px) × 4rem tall (64px) */
   }
 }
 

@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import React from "react";
+import React from 'react'
 
 const LoginButton: React.FC = () => {
   return (
@@ -14,6 +14,6 @@ const LoginButton: React.FC = () => {
         Log In/Sign Up
       </button>
     </div>
-  );
-};
-export default LoginButton;
+  )
+}
+export default LoginButton

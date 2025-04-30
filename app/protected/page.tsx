@@ -1,39 +1,38 @@
-"use client";
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import "../globals.css";
-import TitleImage from '@/components/titleImage';
+'use client'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import '../globals.css'
+import TitleImage from '@/components/titleImage'
 
 export default function CodenamesPage() {
-  const router = useRouter();
-  const [code, setCode] = useState('');
+  const router = useRouter()
+  const [code, setCode] = useState('')
 
   useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
+      document.body.style.overflow = originalOverflow
+    }
+  }, [])
 
-  
   const handleJoinClick = () => {
     if (code.length === 4) {
-      router.push(`/protected/matchmaking?code=${code}`);
+      router.push(`/protected/matchmaking?code=${code}`)
     } else {
-      alert('Please enter a 4-digit code before joining.');
+      alert('Please enter a 4-digit code before joining.')
     }
-  };
+  }
   const handleCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
+    const newValue = event.target.value
     if (/^\d{0,4}$/.test(newValue)) {
-      setCode(newValue);
+      setCode(newValue)
     }
-  };
+  }
   const handleHostClick = () => {
-    const randomCode = Math.floor(1000 + Math.random() * 9000);
-    router.push(`/protected/matchmaking?code=${randomCode}`);
-  };
+    const randomCode = Math.floor(1000 + Math.random() * 9000)
+    router.push(`/protected/matchmaking?code=${randomCode}`)
+  }
 
   return (
     <div className="page-container">
@@ -48,12 +47,16 @@ export default function CodenamesPage() {
           className="code-input"
           data-testid="code-input"
         />
-        <button className='action-button' onClick={handleJoinClick} data-testid={"join-button"}>Join</button>
+        <button className="action-button" onClick={handleJoinClick} data-testid={'join-button'}>
+          Join
+        </button>
       </div>
 
       <div className="host-section">
-        <button className='action-button' onClick={handleHostClick} data-testid={"host-button"}>Host</button>
+        <button className="action-button" onClick={handleHostClick} data-testid={'host-button'}>
+          Host
+        </button>
       </div>
     </div>
-  );
+  )
 }

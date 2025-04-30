@@ -1,12 +1,11 @@
-import PlayerData from '@/types/PlayerData';
-import styles from './SelectedPlayer.module.css';
+import PlayerData from '@/types/PlayerData'
+import styles from './SelectedPlayer.module.css'
 
 interface SelectedPlayerProps {
-  selectedPlayer?: PlayerData;
+  selectedPlayer?: PlayerData
 }
 
 export default function SelectedPlayer({ selectedPlayer }: SelectedPlayerProps) {
-
   if (!selectedPlayer) {
     return
   }
@@ -19,5 +18,5 @@ export default function SelectedPlayer({ selectedPlayer }: SelectedPlayerProps) 
       <h1>{username}</h1>
       {pfp && <img src={pfp} alt={`${username}'s profile`} />}
     </div>
-  );
+  )
 }

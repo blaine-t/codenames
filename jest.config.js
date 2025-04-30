@@ -24,7 +24,7 @@ const config = {
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -32,7 +32,7 @@ const config = {
   // ],
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: "v8",
+  coverageProvider: 'v8',
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -178,11 +178,11 @@ const config = {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { configFile: './babel.config.testing.js' }],
   },
   moduleNameMapper: {
-      '^@/(.*)$': '<rootDir>/$1', // Adjust for your alias configuration
-      '^.+\\.(css|less)$': '<rootDir>/config/CSSStub.js'
+    '^@/(.*)$': '<rootDir>/$1', // Adjust for your alias configuration
+    '^.+\\.(css|less)$': '<rootDir>/config/CSSStub.js',
   },
   testEnvironment: 'jsdom',
-  setupFiles: ["<rootDir>/.jest/env.js"],
+  setupFiles: ['<rootDir>/.jest/env.js'],
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
@@ -201,6 +201,6 @@ const config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-};
+}
 
-module.exports = config;
+module.exports = config

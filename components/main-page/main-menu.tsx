@@ -1,9 +1,8 @@
-"use client";
+'use client'
 
-import React from "react";
-import MenuItems from "./menu-items";
-import LoginButton from "./login-button";
-
+import React from 'react'
+import MenuItems from './menu-items'
+import LoginButton from './login-button'
 
 const MainMenu: React.FC = () => {
   return (
@@ -11,7 +10,7 @@ const MainMenu: React.FC = () => {
       <MenuItems />
       <LoginButton />
     </main>
-  );
-};
+  )
+}
 
-export default MainMenu;
+export default MainMenu

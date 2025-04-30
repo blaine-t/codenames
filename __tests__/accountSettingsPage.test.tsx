@@ -101,11 +101,11 @@ describe('SettingsPage', () => {
   it('navigates to account page on save', async () => {
     render(<SettingsPage />)
     const saveButton = screen.getByTestId('save-button')
-  
+
     await act(async () => {
       fireEvent.click(saveButton)
     })
-  
+
     expect(mockPush).toHaveBeenLastCalledWith('/protected/account')
   })
 })

@@ -12,11 +12,12 @@ We will create a simple, accessible web application version of Codenames for 4+ 
 
 ## Technologies Used
 
-* Node - We decided on Node to run our application. While we wanted to explore Deno it's hard not to stick with what works
-  * Next.js – Used for our full stack approach. Powered by React
-    * React - Our frontend javascript framework that we ended up going with
+- Node - We decided on Node to run our application. While we wanted to explore Deno it's hard not to stick with what works
 
-* Supabase - We ended up going with Supabase for our database as it has great integration with Next.js and allows us to have an easy auth flow
+  - Next.js – Used for our full stack approach. Powered by React
+    - React - Our frontend javascript framework that we ended up going with
+
+- Supabase - We ended up going with Supabase for our database as it has great integration with Next.js and allows us to have an easy auth flow
 
 ## Demo Video - WIP
 

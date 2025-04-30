@@ -1,35 +1,44 @@
-import Board from '@/types/Board';
-import styles from './CardGrid.module.css';
-import Card from "./card";
+import Board from '@/types/Board'
+import styles from './CardGrid.module.css'
+import Card from './card'
 
 interface CardGridProps {
-    isGuesser: boolean;
-    board: Board[] | null;
-    handleClick: any;
-    isSelected: boolean;
+  isGuesser: boolean
+  board: Board[] | null
+  handleClick: any
+  isSelected: boolean
 }
 
 export default function CardGrid({ isGuesser, board, handleClick, isSelected }: CardGridProps) {
-    return (
-        <div className={styles.cardGrid}>
-            {board?.map((card, id) => {
-                let role = ""
-                if (!isGuesser || card.guessed) {
-                    if (card.team_id === 1) {
-                        role = "Red"
-                    } else if (card.team_id === 2) {
-                        role = "Blue"
-                    } else if (card.is_assassin) {
-                        role = "Assassin"
-                    } else if (card.is_bystander) {
-                        role = "Bystander"
-                    }
-                }
-                let covered = card.guessed
-                return (
-                    <Card handleClick={handleClick} key={id} id={id} word={card.word} role={role} covered={covered} isGuesser={isGuesser} isSelected={isSelected} />
-                )
-            })}
-        </div>
-    );
+  return (
+    <div className={styles.cardGrid}>
+      {board?.map((card, id) => {
+        let role = ''
+        if (!isGuesser || card.guessed) {
+          if (card.team_id === 1) {
+            role = 'Red'
+          } else if (card.team_id === 2) {
+            role = 'Blue'
+          } else if (card.is_assassin) {
+            role = 'Assassin'
+          } else if (card.is_bystander) {
+            role = 'Bystander'
+          }
+        }
+        let covered = card.guessed
+        return (
+          <Card
+            handleClick={handleClick}
+            key={id}
+            id={id}
+            word={card.word}
+            role={role}
+            covered={covered}
+            isGuesser={isGuesser}
+            isSelected={isSelected}
+          />
+        )
+      })}
+    </div>
+  )
 }

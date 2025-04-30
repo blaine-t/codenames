@@ -1,25 +1,25 @@
-"use client";
+'use client'
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import "../../globals.css";
-import { useUserProfile } from "@/utils/supabase/useUserProfile";
+import React from 'react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import '../../globals.css'
+import { useUserProfile } from '@/utils/supabase/useUserProfile'
 
 export default function AccountPage() {
-  const router = useRouter();
-  const { profile, loading, error } = useUserProfile();
+  const router = useRouter()
+  const { profile, loading, error } = useUserProfile()
 
   const handleSettings = () => {
-    router.push("/protected/settings");
-  };
+    router.push('/protected/settings')
+  }
 
   if (loading) {
-    return <p className="text-center mt-10">Loading profile...</p>;
+    return <p className="text-center mt-10">Loading profile...</p>
   }
 
   if (error || !profile) {
-    return <p className="text-center mt-10 text-red-600">Error: {error ?? "User profile not found."}</p>;
+    return <p className="text-center mt-10 text-red-600">Error: {error ?? 'User profile not found.'}</p>
   }
 
   return (
@@ -27,7 +27,7 @@ export default function AccountPage() {
       {/* Profile Section */}
       <div className="profile-section">
         <Image
-          src="/samplePFP.png"   //{profile.image} will implement later
+          src="/samplePFP.png" //{profile.image} will implement later
           alt="Profile Picture"
           width={100}
           height={100}
@@ -52,5 +52,5 @@ export default function AccountPage() {
         </ul>
       </div>
     </div>
-  );
+  )
 }

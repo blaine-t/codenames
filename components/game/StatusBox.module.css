@@ -1,87 +1,87 @@
 .box {
-    display: flex;
-    justify-content: space-around;
-    background-color: rgb(255 255 255 / 80%);
-    color: black;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: bolder;
-    font-size: 2vw;
-    width: 55vw;
-    border-radius: 1.5vh 1.5vh 0 0;
+  display: flex;
+  justify-content: space-around;
+  background-color: rgb(255 255 255 / 80%);
+  color: black;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bolder;
+  font-size: 2vw;
+  width: 55vw;
+  border-radius: 1.5vh 1.5vh 0 0;
 }
 
 .wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    height: fit-content;
-    align-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: fit-content;
+  align-content: center;
 }
 
 .inputContainer {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    width: 100%;
-    max-width: 100%;
-    align-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  max-width: 100%;
+  align-content: center;
 }
 
 .label {
-    margin-right: 0.5vw;
-    white-space: nowrap;
+  margin-right: 0.5vw;
+  white-space: nowrap;
 }
 
 .textInput {
-    color: white;
-    padding: 0.5vh 0.8vw;
-    border-radius: 0.5vh;
-    border: 1px solid #ccc;
-    font-size: 1.5vw;
-    width: 20vw;
-    height: 4.5vh;
+  color: white;
+  padding: 0.5vh 0.8vw;
+  border-radius: 0.5vh;
+  border: 1px solid #ccc;
+  font-size: 1.5vw;
+  width: 20vw;
+  height: 4.5vh;
 }
 
 .numberInput {
-    color: white;
-    padding: 0.5vh 0.8vw;
-    border-radius: 0.5vh;
-    border: 1px solid #ccc;
-    font-size: 1.5vw;
-    width: 5vw;
-    height: 4.5vh;
+  color: white;
+  padding: 0.5vh 0.8vw;
+  border-radius: 0.5vh;
+  border: 1px solid #ccc;
+  font-size: 1.5vw;
+  width: 5vw;
+  height: 4.5vh;
 }
 
 .inputContainer input:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0.3vh rgba(0, 123, 255, 0.5);
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0.3vh rgba(0, 123, 255, 0.5);
 }
 
 .inputContainer button {
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 0.5vh;
-    padding: 0 1vw;
-    font-size: 1.5vw;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    height: 4.5vh;
-    text-align: center;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 0.5vh;
+  padding: 0 1vw;
+  font-size: 1.5vw;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: 4.5vh;
+  text-align: center;
 }
 
 .inputContainer button:hover {
-    background-color: #555;
+  background-color: #555;
 }
 
 .inputContainer button:active {
-    background-color: #222;
-    transform: scale(0.98);
+  background-color: #222;
+  transform: scale(0.98);
 }
 
 .inputContainer button:focus {
-    outline: none;
-    box-shadow: 0 0 0.3vh rgba(0, 0, 0, 0.5);
+  outline: none;
+  box-shadow: 0 0 0.3vh rgba(0, 0, 0, 0.5);
 }

@@ -1,47 +1,42 @@
-"use client";
-import React, { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
-import "../../globals.css";
-import { createClient } from "@/utils/supabase/client";
-import CreateGameJson from "@/types/CreateGameJson";
+'use client'
+import React, { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Image from 'next/image'
+import '../../globals.css'
+import { createClient } from '@/utils/supabase/client'
+import CreateGameJson from '@/types/CreateGameJson'
 
 function TitleImage({ gameCode }: { gameCode: string }) {
   return (
     <div className="title-image-container">
-      <Image
-        src="/codenameslogo.png"
-        alt="Codenames Logo"
-        width={300}
-        height={80}
-      />
+      <Image src="/codenameslogo.png" alt="Codenames Logo" width={300} height={80} />
       <div className="game-code">
         <span className="game-code-label">Game code:</span>
         <span>{gameCode}</span>
       </div>
     </div>
-  );
+  )
 }
 
 type PlayerInfo = {
   User: {
-    username: string;
-    image: string | null;
-  } | null;
+    username: string
+    image: string | null
+  } | null
   Team: {
-    id: number;
-    name: string;
-  } | null;
-  is_guesser: boolean;
-};
+    id: number
+    name: string
+  } | null
+  is_guesser: boolean
+}
 
 type PlayerSelectButtonProps = {
-  index: number;
-  selected: boolean;
-  label: string;
-  onSelect: (index: number) => void;
-  customStyle?: React.CSSProperties;
-};
+  index: number
+  selected: boolean
+  label: string
+  onSelect: (index: number) => void
+  customStyle?: React.CSSProperties
+}
 
 const PlayerSelectButton: React.FC<PlayerSelectButtonProps> = ({
   index,
@@ -53,54 +48,55 @@ const PlayerSelectButton: React.FC<PlayerSelectButtonProps> = ({
   return (
     <button
       onClick={() => onSelect(index)}
-      className={`player-select-button ${selected ? "selected" : ""}`}
+      className={`player-select-button ${selected ? 'selected' : ''}`}
       style={customStyle}
     >
       {label}
     </button>
-  );
-};
+  )
+}
 
 function CodenamesPageContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const gameCode = searchParams.get("code") || "";
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const gameCode = searchParams.get('code') || ''
 
-  const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
-  const [userId, setUserId] = useState<number | null>(null);
-  const [turnTime, setTurnTime] = useState<number>(60);
-  const [players, setPlayers] = useState<string[]>(["Player 1", "Player 2", "Player 3", "Player 4"]);
+  const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null)
+  const [username, setUsername] = useState<string | null>(null)
+  const [userId, setUserId] = useState<number | null>(null)
+  const [turnTime, setTurnTime] = useState<number>(60)
+  const [players, setPlayers] = useState<string[]>(['Player 1', 'Player 2', 'Player 3', 'Player 4'])
 
-  const supabase = createClient();
+  const supabase = createClient()
 
   // Enable netcode for checking if the game has been started
   useEffect(() => {
     supabase
-      .channel("schema-db-changes")
+      .channel('schema-db-changes')
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "*",
-          schema: "public",
-          table: "Game",
+          event: '*',
+          schema: 'public',
+          table: 'Game',
           filter: `game_code=eq.${gameCode}`,
         },
         () => {
-          router.push(`/protected/game?code=${gameCode}`);
+          router.push(`/protected/game?code=${gameCode}`)
         }
-      ).on(
-        "postgres_changes",
+      )
+      .on(
+        'postgres_changes',
         {
-          event: "*",
-          schema: "public",
-          table: "Player",
+          event: '*',
+          schema: 'public',
+          table: 'Player',
           filter: `game_code=eq.${gameCode}`,
         },
         async () => {
           // https://stackoverflow.com/a/75224812
           const { data: playerRecord, error: playerError } = await supabase
-            .from("Player")
+            .from('Player')
             .select(
               `
               User (username, image),
@@ -108,10 +104,10 @@ function CodenamesPageContent() {
               is_guesser
               `
             )
-            .eq("game_code", gameCode)
+            .eq('game_code', gameCode)
             .returns<PlayerInfo[]>()
             .limit(4)
-          const playersTemp = ["Player 1", "Player 2", "Player 3", "Player 4"]
+          const playersTemp = ['Player 1', 'Player 2', 'Player 3', 'Player 4']
           // There's a better way to do this but not with how we have this architected
           const player1 = playerRecord?.find((x) => !x.is_guesser && x?.Team?.id === 1)?.User?.username
           const player2 = playerRecord?.find((x) => !x.is_guesser && x?.Team?.id === 2)?.User?.username
@@ -132,17 +128,17 @@ function CodenamesPageContent() {
           setPlayers(playersTemp)
         }
       )
-      .subscribe();
-  }, []);
+      .subscribe()
+  }, [])
 
   // Hide scrollbars
   useEffect(() => {
-    const orig = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const orig = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     return () => {
-      document.body.style.overflow = orig;
-    };
-  }, []);
+      document.body.style.overflow = orig
+    }
+  }, [])
 
   // Fetch current user's username once on mount
   useEffect(() => {
@@ -150,49 +146,48 @@ function CodenamesPageContent() {
       const {
         data: { user: authUser },
         error: authError,
-      } = await supabase.auth.getUser();
-      if (authError || !authUser) return console.error("Auth error", authError);
+      } = await supabase.auth.getUser()
+      if (authError || !authUser) return console.error('Auth error', authError)
 
       const { data: userRecord, error: userError } = await supabase
-        .from("User")
-        .select("username")
-        .eq("auth_id", authUser.id)
-        .single();
+        .from('User')
+        .select('username')
+        .eq('auth_id', authUser.id)
+        .single()
 
-      if (userError || !userRecord)
-        return console.error("Fetch username error", userError);
-      setUsername(userRecord.username);
-    };
-    fetchUsername();
-  }, []);
+      if (userError || !userRecord) return console.error('Fetch username error', userError)
+      setUsername(userRecord.username)
+    }
+    fetchUsername()
+  }, [])
 
   useEffect(() => {
     const getUserId = async () => {
       const {
         data: { user: authUser },
         error: authError,
-      } = await supabase.auth.getUser();
+      } = await supabase.auth.getUser()
 
       if (authError || !authUser) {
-        console.error("User not authenticated:", authError);
-        return;
+        console.error('User not authenticated:', authError)
+        return
       }
 
       const { data: userData, error: userError } = await supabase
-        .from("User")
-        .select("id")
-        .eq("auth_id", authUser.id)
+        .from('User')
+        .select('id')
+        .eq('auth_id', authUser.id)
         .limit(1)
-        .single();
+        .single()
 
-      setUserId(userData?.id);
-    };
-    getUserId();
-  });
+      setUserId(userData?.id)
+    }
+    getUserId()
+  })
 
   const handlePlayerSelect = (index: number) => {
-    setSelectedPlayer((prev) => (prev === index ? null : index));
-  };
+    setSelectedPlayer((prev) => (prev === index ? null : index))
+  }
 
   const handleGameStart = async () => {
     const data: CreateGameJson = {
@@ -200,63 +195,63 @@ function CodenamesPageContent() {
       team1_id: 1,
       team2_id: 2,
       turn_time: turnTime,
-    };
+    }
     // https://stackoverflow.com/a/71927511
-    await fetch("/api/createGame", {
-      method: "POST",
-      mode: "cors",
+    await fetch('/api/createGame', {
+      method: 'POST',
+      mode: 'cors',
       body: JSON.stringify(data),
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     const updatePlayer = async () => {
-      if (selectedPlayer === null) return;
+      if (selectedPlayer === null) return
 
-      const role = selectedPlayer >= 2; // false = Spymaster, true = Operative
-      const teamName = selectedPlayer % 2 === 1 ? "blue" : "red";
+      const role = selectedPlayer >= 2 // false = Spymaster, true = Operative
+      const teamName = selectedPlayer % 2 === 1 ? 'blue' : 'red'
 
       // Get ID from teamName
       const { data: teamData, error: teamError } = await supabase
-        .from("Team")
-        .select("id, name")
-        .ilike("name", teamName);
+        .from('Team')
+        .select('id, name')
+        .ilike('name', teamName)
 
       if (teamError) {
-        console.error("Team fetch error:", teamError);
-        return;
+        console.error('Team fetch error:', teamError)
+        return
       }
 
       if (!teamData || teamData.length === 0) {
-        console.error("No team found for name:", teamName);
-        return;
+        console.error('No team found for name:', teamName)
+        return
       }
 
-      const teamId = teamData[0].id;
+      const teamId = teamData[0].id
 
-      const { error: upsertError } = await supabase.from("Player").upsert(
+      const { error: upsertError } = await supabase.from('Player').upsert(
         {
           user_id: userId,
           game_code: gameCode,
           is_guesser: role,
           team_id: teamId,
         },
-        { onConflict: "user_id" }
-      );
+        { onConflict: 'user_id' }
+      )
 
       if (upsertError) {
-        console.error("Failed to update player:", upsertError);
-        return;
+        console.error('Failed to update player:', upsertError)
+        return
       }
-    };
-    updatePlayer();
-  }, [selectedPlayer]);
+    }
+    updatePlayer()
+  }, [selectedPlayer])
 
   const renderPlayerButtons = () => {
     const teams = [
-      { name: "Red Team", cssClass: "red-team-group", indices: [0, 2] },
-      { name: "Blue Team", cssClass: "blue-team-group", indices: [1, 3] },
-    ];
+      { name: 'Red Team', cssClass: 'red-team-group', indices: [0, 2] },
+      { name: 'Blue Team', cssClass: 'blue-team-group', indices: [1, 3] },
+    ]
 
     return (
       <div className="player-teams-container">
@@ -265,15 +260,13 @@ function CodenamesPageContent() {
             <h2>{team.name}</h2>
             <div className="player-buttons-container">
               {team.indices.map((index) => {
-                const roleLabel = index < 2 ? "Spymaster" : "Field Operative";
+                const roleLabel = index < 2 ? 'Spymaster' : 'Field Operative'
                 const customStyle =
                   selectedPlayer === index
                     ? {
-                      backgroundColor: team.cssClass.startsWith("red")
-                        ? "red"
-                        : "blue",
-                    }
-                    : {};
+                        backgroundColor: team.cssClass.startsWith('red') ? 'red' : 'blue',
+                      }
+                    : {}
 
                 return (
                   <div className="player-button-wrapper" key={index}>
@@ -284,18 +277,16 @@ function CodenamesPageContent() {
                       onSelect={handlePlayerSelect}
                       customStyle={customStyle}
                     />
-                    <span className="player-label">
-                      {players[index]}
-                    </span>
+                    <span className="player-label">{players[index]}</span>
                   </div>
-                );
+                )
               })}
             </div>
           </div>
         ))}
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div className="main-container">
@@ -313,16 +304,12 @@ function CodenamesPageContent() {
         />
       </div>
       <div className="start-button-container">
-        <button
-          onClick={handleGameStart}
-          className="start-button"
-          data-testid={"start-button"}
-        >
+        <button onClick={handleGameStart} className="start-button" data-testid={'start-button'}>
           Start
         </button>
       </div>
     </div>
-  );
+  )
 }
 
 export default function CodenamesPage() {
@@ -330,5 +317,5 @@ export default function CodenamesPage() {
     <Suspense fallback={<div>Loading...</div>}>
       <CodenamesPageContent />
     </Suspense>
-  );
+  )
 }

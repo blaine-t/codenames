@@ -1,10 +1,9 @@
-
 type PlayerData = {
-  id: number;
+  id: number
   User: {
-    username: string;
-    image: string | null;
-  };
+    username: string
+    image: string | null
+  }
 }
 
-export default PlayerData;
+export default PlayerData
