@@ -14,11 +14,11 @@ export default function Card({ handleClick, id, word, role="" }: CardProps) {
   switch (role) {
     case 'Red':
       roleStyle = styles.red
-      textHint = "Y"
+      textHint = "R"
       break
     case 'Blue':
       roleStyle = styles.blue
-      textHint = "O"
+      textHint = "B"
       break
     case 'Assassin':
       roleStyle = styles.assassin
@@ -26,7 +26,7 @@ export default function Card({ handleClick, id, word, role="" }: CardProps) {
       break
     case 'Bystander':
       roleStyle = styles.bystander
-      textHint = "B"
+      textHint = "I"
       break
     default:
       roleStyle = ""

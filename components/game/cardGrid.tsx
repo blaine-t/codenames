@@ -13,7 +13,7 @@ export default function CardGrid({ isGuesser, board, handleClick }: CardGridProp
         <div className={styles.cardGrid}>
             {board?.map((card, id) => {
                 let role = ""
-                if (isGuesser) {
+                if (!isGuesser || card.guessed) {
                     if (card.team_id === 1) {
                         role = "Red"
                     } else if (card.team_id === 2) {

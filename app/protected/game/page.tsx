@@ -94,6 +94,27 @@ function GameContent() {
     fetchGameData();
   }, []);
 
+  // Enable netcode for handling when game state changes
+    useEffect(() => {
+      supabase
+        .channel("schema-db-changes-game")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "Game",
+            filter: `game_code=eq.${gameCode}`,
+          },
+          (payload) => {
+            if (payload.new && 'board' in payload.new) {
+              setBoard(payload.new.board as Board[])
+            }
+          }
+        )
+        .subscribe();
+    }, []);
+
   function handleClick(id: number) {
     const sendGuess = async () => {
       const data = {
