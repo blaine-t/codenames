@@ -7,12 +7,7 @@ import CardGrid from "@/components/game/cardGrid";
 import TimeBox from "@/components/game/timeBox";
 import RoleBox from "@/components/game/roleBox";
 import StatusBox from "@/components/game/statusBox";
-
-type board = {
-  word: string;
-  allegiance: any;
-  guessed: boolean;
-};
+import Board from "@/types/Board";
 
 function GameContent() {
   const searchParams = useSearchParams();
@@ -24,7 +19,7 @@ function GameContent() {
   const [team, setTeam] = useState<string | null>(null);
   const [teamId, setTeamId] = useState<number | null>(null);
   const [turnTime, setTurnTime] = useState<number | null>(null);
-  const [board, setBoard] = useState<board | null>(null);
+  const [board, setBoard] = useState<Board[] | null>(null);
 
   useEffect(() => {
     const fetchPlayerData = async () => {
@@ -120,7 +115,7 @@ function GameContent() {
       <TimeBox seconds={turnTime} />
       <div className="table">
         <RoleBox role={`${role} (${team})`} />
-        <CardGrid handleClick={handleClick} />
+        <CardGrid isGuesser={role === 'Field Operative'} board={board} handleClick={handleClick} />
         <StatusBox clue="green" guesses={5} guessesLeft={6} />
       </div>
     </>
