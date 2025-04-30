@@ -77,7 +77,7 @@ function CodenamesPageContent() {
   // Enable netcode for checking if the game has been started
   useEffect(() => {
     supabase
-      .channel("schema-db-changes-game")
+      .channel("schema-db-changes")
       .on(
         "postgres_changes",
         {
@@ -89,15 +89,7 @@ function CodenamesPageContent() {
         () => {
           router.push(`/protected/game?code=${gameCode}`);
         }
-      )
-      .subscribe();
-  }, []);
-
-  // Enable netcode for checking if players have selected their positions
-  useEffect(() => {
-    supabase
-      .channel("schema-db-changes-players")
-      .on(
+      ).on(
         "postgres_changes",
         {
           event: "*",

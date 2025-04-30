@@ -8,6 +8,7 @@ import TimeBox from "@/components/game/timeBox";
 import RoleBox from "@/components/game/roleBox";
 import StatusBox from "@/components/game/statusBox";
 import Board from "@/types/Board";
+import Clue from "@/types/Clue";
 
 function GameContent() {
   const searchParams = useSearchParams();
@@ -20,6 +21,7 @@ function GameContent() {
   const [teamId, setTeamId] = useState<number | null>(null);
   const [turnTime, setTurnTime] = useState<number | null>(null);
   const [board, setBoard] = useState<Board[] | null>(null);
+  const [clue, setClue] = useState<Clue | undefined>(undefined);
 
   useEffect(() => {
     const fetchPlayerData = async () => {
@@ -97,7 +99,7 @@ function GameContent() {
   // Enable netcode for handling when game state changes
     useEffect(() => {
       supabase
-        .channel("schema-db-changes-game")
+        .channel("schema-db-changes")
         .on(
           "postgres_changes",
           {
@@ -106,9 +108,20 @@ function GameContent() {
             table: "Game",
             filter: `game_code=eq.${gameCode}`,
           },
-          (payload) => {
+          async (payload) => {
             if (payload.new && 'board' in payload.new) {
               setBoard(payload.new.board as Board[])
+            }
+
+            if (payload.new && 'clue_id' in payload.new && payload.new.clue_id) {
+              const { data: clueRecord } = await supabase
+              .from("Clue")
+              .select('phrase, count, remaining_guesses')
+              .eq("id", payload.new.clue_id)
+              .single()
+              setClue(clueRecord as Clue)
+            } else {
+              setClue(undefined)
             }
           }
         )
@@ -137,7 +150,7 @@ function GameContent() {
       <div className="table">
         <RoleBox role={`${role} (${team})`} />
         <CardGrid isGuesser={role === 'Field Operative'} board={board} handleClick={handleClick} />
-        <StatusBox clue="green" guesses={5} guessesLeft={6} />
+        <StatusBox clue={clue} />
       </div>
     </>
   );
