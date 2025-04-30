@@ -11,6 +11,10 @@
   cursor: pointer;
 }
 
+.card.isNotGuesser {
+    cursor: default;
+}
+
 .card.covered {
     cursor: default;
 }
@@ -92,4 +96,10 @@
 
 .bystander.covered.cardButton {
   color: #999999;
+}
+
+.covered.cardButton:hover {
+  color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(255, 255, 255, 0.75);
+  cursor: zoom-in;
 }

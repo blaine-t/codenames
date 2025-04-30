@@ -190,7 +190,7 @@ function GameContent() {
       <TimeBox seconds={turnTime} />
       <div className="table">
         <RoleBox role={`${role} (${team})`} />
-        <CardGrid isGuesser={isGuesser} board={board} handleClick={handleClick} />
+        <CardGrid isGuesser={isGuesser} board={board} handleClick={isGuesser ? handleClick : null} />
         <div className="bottomWrapper">
           <SelectedPlayer selectedPlayer={players?.find((x) => x.id === selectedPlayerId)} />
           <StatusBox clue={clue} isGuesser={isGuesser} needClue={selectedPlayerId === playerId && !isGuesser} submitClue={submitClue} />
