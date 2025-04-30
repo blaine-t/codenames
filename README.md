@@ -14,7 +14,7 @@ We will create a simple, accessible web application version of Codenames for 4+ 
 
 - Node - We decided on Node to run our application. While we wanted to explore Deno it's hard not to stick with what works
 
-  - Next.js – Used for our full stack approach. Powered by React
+  - Next.js – Used for our full stack approach. Powered by React. Due to this we don't have a seperate frontend and backend folder. The closest to a backend folder is the app/api folder.
     - React - Our frontend javascript framework that we ended up going with
 
 - Supabase - We ended up going with Supabase for our database as it has great integration with Next.js and allows us to have an easy auth flow
@@ -27,7 +27,7 @@ For R1 we wanted to have a working account and lobby.
 
 ## Game
 
-For R1 we didn't want to prioritize having a functional game over working account and lobby functionality so we decided to make a dummy version with just styling that is available to view at https://codenames.traudt.dev/protected/game.
+For R2 we finished up implementing the game and now (hopefully) have a fully featured game available at https://codenames.traudt.dev
 
 ## Our Team
 
