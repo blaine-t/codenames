@@ -42,7 +42,7 @@ export async function POST(req: Request) {
             .eq("is_guesser", false)
             .eq("game_code", game_code)
             .single()
-        const {data: updatedGame } = await supabase.from("Game").update({ clue_id: null, selected_player_id: playerData?.id })
+        const {data: updatedGame } = await supabase.from("Game").update({ clue_id: null, selected_player_id: playerData?.id }).eq("game_code", game_code)
     }
 
     async function updateBoard(board: any) {
@@ -73,14 +73,21 @@ export async function POST(req: Request) {
             if (card.team_id === guessing_team_id) {
                 await teamDecrementCardsRemaining(guessing_team_id)
                 remaining_guesses--
+                console.log(remaining_guesses)
                 if (remaining_guesses <= 0) {
                     await changePossession(other_team_id)
                 } else {
                     await supabase.from("Clue").update({ remaining_guesses }).eq("id", clue.id)
                 }
+                await updateBoard(board)
+                return new Response("Card was yours", {status: 200 })
+            } else {
+                // Player guessed for the wrong team
+                await teamDecrementCardsRemaining(other_team_id)
+                await changePossession(other_team_id)
+                await updateBoard(board)
+                return new Response("Card was for opposing team", {status: 200 })
             }
-            await updateBoard(board)
-            return new Response("Card was yours", {status: 200 })
         }
         // Player guessed an assassin card
         else if (card.is_assassin) {
@@ -92,12 +99,6 @@ export async function POST(req: Request) {
             await changePossession(other_team_id)
             await updateBoard(board)
             return new Response("Card was bystander", {status: 200 })
-        } else {
-            // Player guessed for the wrong team
-            await teamDecrementCardsRemaining(other_team_id)
-            await changePossession(other_team_id)
-            await updateBoard(board)
-            return new Response("Card was for opposing team", {status: 200 })
         }
     }
 }

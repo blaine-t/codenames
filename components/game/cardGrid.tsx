@@ -1,35 +1,38 @@
 import styles from './CardGrid.module.css';
 import Card from "./card";
 
-export default function CardGrid() {
+interface CardGridProps {
+    handleClick: any;
+}
+
+export default function CardGrid({ handleClick }: CardGridProps) {
     return (
         <div className={styles.cardGrid}>
-            <Card word="Alpha" />
-            <Card word="Beta" />
-            <Card word="Charlie" />
-            <Card word="Delta" />
-            <Card word="Echo" />
-            <Card word="Foxtrot" />
-            <Card word="Golf" />
-            <Card word="Hotel" />
-            <Card word="India" />
-            <Card word="Juliett" />
-            <Card word="Kilo" />
-            <Card word="Lima" />
-            <Card word="Mike" />
-            <Card word="November" />
-            <Card word="Oscar" />
-            <Card word="Papa" />
-            <Card word="Quebec" />
-            <Card word="Romeo" />
-            <Card word="Sierra" />
-            <Card word="Tango" />
-            <Card word="Uniform" />
-            <Card word="Victor" />
-            <Card word="Whiskey" />
-            <Card word="Xray" />
-            <Card word="Yankee" />
+            <Card handleClick={handleClick} id={0} word="Alpha" />
+            <Card handleClick={handleClick} id={1} word="Beta" />
+            <Card handleClick={handleClick} id={2} word="Charlie" />
+            <Card handleClick={handleClick} id={3} word="Delta" />
+            <Card handleClick={handleClick} id={4} word="Echo" />
+            <Card handleClick={handleClick} id={5} word="Foxtrot" />
+            <Card handleClick={handleClick} id={6} word="Golf" />
+            <Card handleClick={handleClick} id={7} word="Hotel" />
+            <Card handleClick={handleClick} id={8} word="India" />
+            <Card handleClick={handleClick} id={9} word="Juliett" />
+            <Card handleClick={handleClick} id={10} word="Kilo" />
+            <Card handleClick={handleClick} id={11} word="Lima" />
+            <Card handleClick={handleClick} id={12} word="Mike" />
+            <Card handleClick={handleClick} id={13} word="November" />
+            <Card handleClick={handleClick} id={14} word="Oscar" />
+            <Card handleClick={handleClick} id={15} word="Papa" />
+            <Card handleClick={handleClick} id={16} word="Quebec" />
+            <Card handleClick={handleClick} id={17} word="Romeo" />
+            <Card handleClick={handleClick} id={18} word="Sierra" />
+            <Card handleClick={handleClick} id={19} word="Tango" />
+            <Card handleClick={handleClick} id={20} word="Uniform" />
+            <Card handleClick={handleClick} id={21} word="Victor" />
+            <Card handleClick={handleClick} id={22} word="Whiskey" />
+            <Card handleClick={handleClick} id={23} word="Xray" />
+            <Card handleClick={handleClick} id={24} word="Yankee" />
         </div>
     );
-  }
-  
+}

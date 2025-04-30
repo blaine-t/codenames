@@ -22,6 +22,7 @@ function GameContent() {
 
   const [role, setRole] = useState<string | null>(null);
   const [team, setTeam] = useState<string | null>(null);
+  const [teamId, setTeamId] = useState<number | null>(null);
   const [turnTime, setTurnTime] = useState<number | null>(null);
   const [board, setBoard] = useState<board | null>(null);
 
@@ -78,6 +79,7 @@ function GameContent() {
 
       setRole(readableRole);
       setTeam(readableTeam);
+      setTeamId(playerData.team_id)
     };
 
     fetchPlayerData();
@@ -97,12 +99,28 @@ function GameContent() {
     fetchGameData();
   }, []);
 
+  function handleClick(id: number) {
+    const sendGuess = async () => {
+      const data = {
+        game_code: gameCode,
+        card_id: id,
+        guessing_team_id: teamId
+      }
+      await fetch("/api/submitGuess", {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify(data),
+      });
+    }
+    sendGuess()
+  }
+
   return (
     <>
       <TimeBox seconds={turnTime} />
       <div className="table">
         <RoleBox role={`${role} (${team})`} />
-        <CardGrid />
+        <CardGrid handleClick={handleClick} />
         <StatusBox clue="green" guesses={5} guessesLeft={6} />
       </div>
     </>
