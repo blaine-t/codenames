@@ -265,7 +265,7 @@ body {
 .table {
   display: flex;
   width: 100vw;
-  height: 100vh;
+  height: 87vh;
   background-image: url("/table.jpg");
   background-size: cover;
   flex-direction: column;
@@ -352,3 +352,6 @@ body {
   }
 }
 
+.bottomWrapper {
+  display: flex;
+}

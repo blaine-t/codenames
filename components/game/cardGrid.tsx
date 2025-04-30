@@ -1,35 +1,35 @@
+import Board from '@/types/Board';
 import styles from './CardGrid.module.css';
 import Card from "./card";
 
-export default function CardGrid() {
+interface CardGridProps {
+    isGuesser: boolean;
+    board: Board[] | null;
+    handleClick: any;
+    isSelected: boolean;
+}
+
+export default function CardGrid({ isGuesser, board, handleClick, isSelected }: CardGridProps) {
     return (
         <div className={styles.cardGrid}>
-            <Card word="Alpha" />
-            <Card word="Beta" />
-            <Card word="Charlie" />
-            <Card word="Delta" />
-            <Card word="Echo" />
-            <Card word="Foxtrot" />
-            <Card word="Golf" />
-            <Card word="Hotel" />
-            <Card word="India" />
-            <Card word="Juliett" />
-            <Card word="Kilo" />
-            <Card word="Lima" />
-            <Card word="Mike" />
-            <Card word="November" />
-            <Card word="Oscar" />
-            <Card word="Papa" />
-            <Card word="Quebec" />
-            <Card word="Romeo" />
-            <Card word="Sierra" />
-            <Card word="Tango" />
-            <Card word="Uniform" />
-            <Card word="Victor" />
-            <Card word="Whiskey" />
-            <Card word="Xray" />
-            <Card word="Yankee" />
+            {board?.map((card, id) => {
+                let role = ""
+                if (!isGuesser || card.guessed) {
+                    if (card.team_id === 1) {
+                        role = "Red"
+                    } else if (card.team_id === 2) {
+                        role = "Blue"
+                    } else if (card.is_assassin) {
+                        role = "Assassin"
+                    } else if (card.is_bystander) {
+                        role = "Bystander"
+                    }
+                }
+                let covered = card.guessed
+                return (
+                    <Card handleClick={handleClick} key={id} id={id} word={card.word} role={role} covered={covered} isGuesser={isGuesser} isSelected={isSelected} />
+                )
+            })}
         </div>
     );
-  }
-  
+}

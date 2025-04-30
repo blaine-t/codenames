@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import "../../globals.css";
 import { createClient } from "@/utils/supabase/client";
+import CreateGameJson from "@/types/CreateGameJson";
 
 function TitleImage({ gameCode }: { gameCode: string }) {
   return (
@@ -21,6 +22,18 @@ function TitleImage({ gameCode }: { gameCode: string }) {
     </div>
   );
 }
+
+type PlayerInfo = {
+  User: {
+    username: string;
+    image: string | null;
+  } | null;
+  Team: {
+    id: number;
+    name: string;
+  } | null;
+  is_guesser: boolean;
+};
 
 type PlayerSelectButtonProps = {
   index: number;
@@ -56,8 +69,71 @@ function CodenamesPageContent() {
   const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
+  const [turnTime, setTurnTime] = useState<number>(60);
+  const [players, setPlayers] = useState<string[]>(["Player 1", "Player 2", "Player 3", "Player 4"]);
 
   const supabase = createClient();
+
+  // Enable netcode for checking if the game has been started
+  useEffect(() => {
+    supabase
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "Game",
+          filter: `game_code=eq.${gameCode}`,
+        },
+        () => {
+          router.push(`/protected/game?code=${gameCode}`);
+        }
+      ).on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "Player",
+          filter: `game_code=eq.${gameCode}`,
+        },
+        async () => {
+          // https://stackoverflow.com/a/75224812
+          const { data: playerRecord, error: playerError } = await supabase
+            .from("Player")
+            .select(
+              `
+              User (username, image),
+              Team (id, name),
+              is_guesser
+              `
+            )
+            .eq("game_code", gameCode)
+            .returns<PlayerInfo[]>()
+            .limit(4)
+          const playersTemp = ["Player 1", "Player 2", "Player 3", "Player 4"]
+          // There's a better way to do this but not with how we have this architected
+          const player1 = playerRecord?.find((x) => !x.is_guesser && x?.Team?.id === 1)?.User?.username
+          const player2 = playerRecord?.find((x) => !x.is_guesser && x?.Team?.id === 2)?.User?.username
+          const player3 = playerRecord?.find((x) => x.is_guesser && x?.Team?.id === 1)?.User?.username
+          const player4 = playerRecord?.find((x) => x.is_guesser && x?.Team?.id === 2)?.User?.username
+          if (player1) {
+            playersTemp[0] = player1
+          }
+          if (player2) {
+            playersTemp[1] = player2
+          }
+          if (player3) {
+            playersTemp[2] = player3
+          }
+          if (player4) {
+            playersTemp[3] = player4
+          }
+          setPlayers(playersTemp)
+        }
+      )
+      .subscribe();
+  }, []);
 
   // Hide scrollbars
   useEffect(() => {
@@ -91,19 +167,7 @@ function CodenamesPageContent() {
   }, []);
 
   useEffect(() => {
-    const getOtherPlayers = async () => {
-      const { data: otherPlayers, error: playerCheckError } = await supabase
-        .from("Player")
-        .select(
-          `
-      User (username, image)
-      Team (id, name)
-      is_guesser
-    `
-        )
-        .eq("game_code", gameCode)
-        .limit(3);
-
+    const getUserId = async () => {
       const {
         data: { user: authUser },
         error: authError,
@@ -122,70 +186,71 @@ function CodenamesPageContent() {
         .single();
 
       setUserId(userData?.id);
-
-      const { error: upsertError } = await supabase.from("Player").upsert(
-        {
-          user_id: userId,
-          is_host: otherPlayers?.length === 0,
-          game_code: gameCode,
-          is_guesser: null,
-          team_id: null,
-        },
-        { onConflict: "user_id" }
-      );
-
-      if (upsertError) {
-        console.error("Failed to insert/update player:", upsertError);
-        return;
-      }
     };
-    getOtherPlayers();
+    getUserId();
   });
 
   const handlePlayerSelect = (index: number) => {
     setSelectedPlayer((prev) => (prev === index ? null : index));
   };
 
-  const handleStart = async () => {
-    if (selectedPlayer === null) return;
-
-    const role = selectedPlayer >= 2; // false = Spymaster, true = Operative
-    const teamName = selectedPlayer % 2 === 1 ? "blue" : "red";
-
-    // Get ID from teamName
-    const { data: teamData, error: teamError } = await supabase
-      .from("Team")
-      .select("id, name")
-      .ilike("name", teamName);
-
-    if (teamError) {
-      console.error("Team fetch error:", teamError);
-      return;
-    }
-
-    if (!teamData || teamData.length === 0) {
-      console.error("No team found for name:", teamName);
-      return;
-    }
-
-    const teamId = teamData[0].id;
-
-    const { error: updateError } = await supabase
-      .from("Player")
-      .update({
-        game_code: gameCode,
-        is_guesser: role,
-        team_id: teamId,
-      })
-      .eq("user_id", userId);
-      
-    if (updateError) {
-      console.error("Failed to insert/update player:", updateError);
-      return;
-    }
-
-    router.push("/protected/game");
+  const handleGameStart = async () => {
+    const data: CreateGameJson = {
+      game_code: parseInt(gameCode),
+      team1_id: 1,
+      team2_id: 2,
+      turn_time: turnTime,
+    };
+    // https://stackoverflow.com/a/71927511
+    await fetch("/api/createGame", {
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify(data),
+    });
   };
+
+  useEffect(() => {
+    const updatePlayer = async () => {
+      if (selectedPlayer === null) return;
+
+      const role = selectedPlayer >= 2; // false = Spymaster, true = Operative
+      const teamName = selectedPlayer % 2 === 1 ? "blue" : "red";
+
+      // Get ID from teamName
+      const { data: teamData, error: teamError } = await supabase
+        .from("Team")
+        .select("id, name")
+        .ilike("name", teamName);
+
+      if (teamError) {
+        console.error("Team fetch error:", teamError);
+        return;
+      }
+
+      if (!teamData || teamData.length === 0) {
+        console.error("No team found for name:", teamName);
+        return;
+      }
+
+      const teamId = teamData[0].id;
+
+      const { error: upsertError } = await supabase.from("Player").upsert(
+        {
+          user_id: userId,
+          game_code: gameCode,
+          is_guesser: role,
+          team_id: teamId,
+        },
+        { onConflict: "user_id" }
+      );
+
+      if (upsertError) {
+        console.error("Failed to update player:", upsertError);
+        return;
+      }
+    };
+    updatePlayer();
+  }, [selectedPlayer]);
 
   const renderPlayerButtons = () => {
     const teams = [
@@ -204,10 +269,10 @@ function CodenamesPageContent() {
                 const customStyle =
                   selectedPlayer === index
                     ? {
-                        backgroundColor: team.cssClass.startsWith("red")
-                          ? "red"
-                          : "blue",
-                      }
+                      backgroundColor: team.cssClass.startsWith("red")
+                        ? "red"
+                        : "blue",
+                    }
                     : {};
 
                 return (
@@ -220,9 +285,7 @@ function CodenamesPageContent() {
                       customStyle={customStyle}
                     />
                     <span className="player-label">
-                      {selectedPlayer === index && username
-                        ? username
-                        : `Player ${index + 1}`}
+                      {players[index]}
                     </span>
                   </div>
                 );
@@ -244,12 +307,17 @@ function CodenamesPageContent() {
           type="number"
           min="1"
           max="1000"
-          defaultValue="60"
+          value={turnTime}
           className="turn-time-input"
+          onChange={(e) => setTurnTime(parseInt(e.target.value))}
         />
       </div>
       <div className="start-button-container">
-        <button onClick={handleStart} className="start-button" data-testid={"start-button"}>
+        <button
+          onClick={handleGameStart}
+          className="start-button"
+          data-testid={"start-button"}
+        >
           Start
         </button>
       </div>
