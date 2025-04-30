@@ -7,9 +7,10 @@ interface TimeBoxProps {
   seconds: number | null
   reset: boolean
   setReset: any
+  setTimerUp: any
 }
 
-export default function Card({ seconds, reset, setReset }: TimeBoxProps) {
+export default function Card({ seconds, reset, setReset, setTimerUp }: TimeBoxProps) {
   const [time, setTime] = useState(seconds || 60)
 
   if (reset) {
@@ -21,10 +22,10 @@ export default function Card({ seconds, reset, setReset }: TimeBoxProps) {
       return
     }
     setTime(seconds)
-    console.log(reset)
     const timer = setInterval(() => {
       setTime((prevTime) => {
         if (prevTime <= 1) {
+          setTimerUp(true)
           clearInterval(timer)
           return 0
         }

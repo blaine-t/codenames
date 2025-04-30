@@ -83,7 +83,6 @@ export async function POST(req: Request) {
       if (card.team_id === guessing_team_id) {
         await teamDecrementCardsRemaining(guessing_team_id)
         remaining_guesses--
-        console.log(remaining_guesses)
         if (remaining_guesses <= 0) {
           await changePossession(other_team_id)
         } else {

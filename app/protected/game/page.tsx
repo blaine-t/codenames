@@ -29,6 +29,7 @@ function GameContent() {
   const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null)
   const [players, setPlayers] = useState<PlayerData[] | null>(null)
   const [reset, setReset] = useState<boolean>(false)
+  const [timerUp, setTimerUp] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchGameData = async (playerIdCurrent: number) => {
@@ -153,9 +154,27 @@ function GameContent() {
 
   // Weird way to force rerender of timer on player change
   useEffect(() => {
-    console.log('Using effect', reset)
     setReset(true)
   }, [selectedPlayerId])
+
+  useEffect(() => {
+    const sendTimerUp = async () => {
+      const data = {
+        game_code: gameCode,
+        player_id: playerId,
+        guessing_team_id: teamId
+      }
+      await fetch('/api/timerUp', {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify(data),
+      })
+    }
+    if (timerUp) {
+      setTimerUp(false)
+      sendTimerUp()
+    }
+  }, [timerUp])
 
   function handleClick(id: number) {
     const sendGuess = async () => {
@@ -194,7 +213,7 @@ function GameContent() {
 
   return (
     <>
-      <TimeBox seconds={turnTime} reset={reset} setReset={setReset} />
+      <TimeBox seconds={turnTime} reset={reset} setReset={setReset} setTimerUp={setTimerUp} />
       <div className="table">
         <RoleBox role={`${role} (${team})`} />
         <CardGrid
