@@ -8,13 +8,13 @@ interface CardGridProps {
 export default function CardGrid({ handleClick }: CardGridProps) {
     return (
         <div className={styles.cardGrid}>
-            <Card handleClick={handleClick} id={0} word="Alpha" />
-            <Card handleClick={handleClick} id={1} word="Beta" />
-            <Card handleClick={handleClick} id={2} word="Charlie" />
-            <Card handleClick={handleClick} id={3} word="Delta" />
+            <Card handleClick={handleClick} id={0} word="Alpha" role='Red' />
+            <Card handleClick={handleClick} id={1} word="Beta" role='Blue' />
+            <Card handleClick={handleClick} id={2} word="Charlie" role='Assassin' />
+            <Card handleClick={handleClick} id={3} word="Delta" role='Bystander' />
             <Card handleClick={handleClick} id={4} word="Echo" />
-            <Card handleClick={handleClick} id={5} word="Foxtrot" />
-            <Card handleClick={handleClick} id={6} word="Golf" />
+            <Card handleClick={handleClick} id={5} word="Foxtrot" role='Blue' />
+            <Card handleClick={handleClick} id={6} word="Golf" role='Red' />
             <Card handleClick={handleClick} id={7} word="Hotel" />
             <Card handleClick={handleClick} id={8} word="India" />
             <Card handleClick={handleClick} id={9} word="Juliett" />
