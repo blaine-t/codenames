@@ -9,6 +9,8 @@ import RoleBox from "@/components/game/roleBox";
 import StatusBox from "@/components/game/statusBox";
 import Board from "@/types/Board";
 import Clue from "@/types/Clue";
+import PlayerData from "@/types/PlayerData";
+import SelectedPlayer from "@/components/game/selectedPlayer";
 
 function GameContent() {
   const searchParams = useSearchParams();
@@ -25,6 +27,7 @@ function GameContent() {
   const [isGuesser, setIsGuesser] = useState<boolean>(true);
   const [playerId, setPlayerId] = useState<number | null>(null);
   const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
+  const [players, setPlayers] = useState<PlayerData[] | null>(null);
 
   useEffect(() => {
     const fetchGameData = async (playerIdCurrent: number) => {
@@ -72,6 +75,17 @@ function GameContent() {
         return;
       }
 
+      setPlayerId(playerData.id)
+      setIsGuesser(playerData.is_guesser)
+      setTeamId(playerData.team_id)
+      
+      const readableRole = playerData.is_guesser
+        ? "Field Operative"
+        : "Spymaster";
+      setRole(readableRole)
+      
+      await fetchGameData(playerData.id);
+      
       const { data: teamData, error: teamError } = await supabase
         .from("Team")
         .select("name")
@@ -83,17 +97,20 @@ function GameContent() {
         return;
       }
 
-      const readableRole = playerData.is_guesser
-        ? "Field Operative"
-        : "Spymaster";
       const readableTeam = teamData.name;
-
-      setPlayerId(playerData.id)
-      setIsGuesser(playerData.is_guesser)
-      setRole(readableRole)
       setTeam(readableTeam)
-      setTeamId(playerData.team_id)
-      await fetchGameData(playerData.id);
+
+      const { data: playersData, error: playersError } = await supabase
+        .from("Player")
+        .select(`
+          id,
+          User (username, image)
+        `)
+        .eq('game_code', gameCode)
+        .returns<PlayerData[]>()
+        .limit(4)
+
+      setPlayers(playersData)
     };
 
     fetchPlayerData();
@@ -114,6 +131,9 @@ function GameContent() {
           if (payload.new && 'board' in payload.new) {
             setBoard(payload.new.board as Board[])
           }
+          if (payload.new && 'selected_player_id' in payload.new) {
+            setSelectedPlayerId(payload.new.selected_player_id)
+          }
 
           if (payload.new && 'clue_id' in payload.new && payload.new.clue_id) {
             const { data: clueRecord } = await supabase
@@ -124,10 +144,6 @@ function GameContent() {
             setClue(clueRecord as Clue)
           } else {
             setClue(undefined)
-          }
-
-          if (payload.new && 'selected_player_id' in payload.new) {
-            setSelectedPlayerId(payload.new.selected_player_id)
           }
         }
       )
@@ -175,7 +191,10 @@ function GameContent() {
       <div className="table">
         <RoleBox role={`${role} (${team})`} />
         <CardGrid isGuesser={isGuesser} board={board} handleClick={handleClick} />
-        <StatusBox clue={clue} isGuesser={isGuesser} needClue={selectedPlayerId === playerId && !isGuesser} submitClue={submitClue} />
+        <div className="bottomWrapper">
+          <SelectedPlayer selectedPlayer={players?.find((x) => x.id === selectedPlayerId)} />
+          <StatusBox clue={clue} isGuesser={isGuesser} needClue={selectedPlayerId === playerId && !isGuesser} submitClue={submitClue} />
+        </div>
       </div>
     </>
   );

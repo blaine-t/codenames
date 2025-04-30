@@ -352,3 +352,6 @@ body {
   }
 }
 
+.bottomWrapper {
+  display: flex;
+}
