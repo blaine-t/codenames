@@ -28,6 +28,7 @@ function GameContent() {
   const [playerId, setPlayerId] = useState<number | null>(null);
   const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
   const [players, setPlayers] = useState<PlayerData[] | null>(null);
+  const [reset, setReset] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchGameData = async (playerIdCurrent: number) => {
@@ -150,6 +151,12 @@ function GameContent() {
       .subscribe();
   }, []);
 
+  // Weird way to force rerender of timer on player change
+  useEffect(() => {
+    console.log("Using effect", reset)
+    setReset(true)
+  }, [selectedPlayerId])
+
   function handleClick(id: number) {
     const sendGuess = async () => {
       const data = {
@@ -187,7 +194,7 @@ function GameContent() {
 
   return (
     <>
-      <TimeBox seconds={turnTime} />
+      <TimeBox seconds={turnTime} reset={reset} setReset={setReset} />
       <div className="table">
         <RoleBox role={`${role} (${team})`} />
         <CardGrid isGuesser={isGuesser} board={board} handleClick={handleClick} isSelected={selectedPlayerId === playerId} />

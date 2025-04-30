@@ -5,16 +5,23 @@ import { useEffect, useState } from 'react';
 
 interface TimeBoxProps {
   seconds: number | null;
+  reset: boolean;
+  setReset: any;
 }
 
-export default function Card({ seconds }: TimeBoxProps) {
+export default function Card({ seconds, reset, setReset }: TimeBoxProps) {
   const [time, setTime] = useState(seconds || 60);
+
+  if (reset) {
+    setReset(false)
+  }
 
   useEffect(() => {
     if (seconds == null) {
       return
     }
     setTime(seconds)
+    console.log(reset)
     const timer = setInterval(() => {
       setTime((prevTime) => {
         if (prevTime <= 1) {
@@ -25,7 +32,7 @@ export default function Card({ seconds }: TimeBoxProps) {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [seconds]);
+  }, [seconds, reset]);
   
   const minutes = Math.floor(time / 60).toString();
   const displaySeconds = (time % 60).toString().padStart(2, '0');
