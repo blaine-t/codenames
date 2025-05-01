@@ -1,5 +1,4 @@
 import Guess from '@/types/Guess'
-
 import { createClient } from '@/utils/supabase/server'
 
 type GameInfo = {

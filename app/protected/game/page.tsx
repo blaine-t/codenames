@@ -1,6 +1,6 @@
 'use client'
 import { createClient } from '@/utils/supabase/client'
-import { redirect, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState, Suspense } from 'react'
 import '../../globals.css'
 import CardGrid from '@/components/game/cardGrid'

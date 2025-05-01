@@ -1,14 +1,13 @@
 import React from 'react'
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import CodenamesPage from '../app/protected/matchmaking/page'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import '@testing-library/jest-dom'
 
 // Mocks
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
-  useSearchParams: jest.fn(() => new URLSearchParams('code=1234')),
 }))
 jest.mock('@/utils/supabase/client', () => ({
   createClient: jest.fn(),

@@ -1,5 +1,4 @@
 import TimerUpRequest from '@/types/TimerUpRequest'
-
 import { createClient } from '@/utils/supabase/server'
 
 type GameData = {

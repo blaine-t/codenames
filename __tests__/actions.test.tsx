@@ -2,7 +2,6 @@ import {
   signUpAction,
   signInAction,
   forgotPasswordAction,
-  resetPasswordAction,
   signOutAction,
   accountAction,
   backAction,

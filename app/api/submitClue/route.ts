@@ -1,5 +1,4 @@
 import NewClue from '@/types/NewClue'
-
 import { createClient } from '@/utils/supabase/server'
 
 type PlayerInfo = {
