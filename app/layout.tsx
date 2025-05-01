@@ -1,11 +1,7 @@
-import DeployButton from '@/components/deploy-button'
-import { EnvVarWarning } from '@/components/env-var-warning'
 import HeaderAuth from '@/components/header-auth'
 import { ThemeSwitcher } from '@/components/theme-switcher'
-import { hasEnvVars } from '@/utils/supabase/check-env-vars'
 import { Geist } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
-import Link from 'next/link'
 import './globals.css'
 
 const defaultUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
@@ -37,7 +33,7 @@ export default function RootLayout({
                   <div className="flex gap-5 items-center font-semibold">
                     <div className="flex items-center"></div>
                   </div>
-                  {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth pathname="TODO" />}
+                  {<HeaderAuth pathname="TODO" />}
                 </div>
               </nav>
               <div>{children}</div>
