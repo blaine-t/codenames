@@ -1,5 +1,5 @@
 import Board from '@/types/Board'
-import styles from './CardGrid.module.css'
+import styles from './cardGrid.module.css'
 import Card from './card'
 
 interface CardGridProps {

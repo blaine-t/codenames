@@ -1,5 +1,5 @@
 import Clue from '@/types/Clue'
-import styles from './StatusBox.module.css'
+import styles from './statusBox.module.css'
 
 interface RoleBoxProps {
   clue?: Clue

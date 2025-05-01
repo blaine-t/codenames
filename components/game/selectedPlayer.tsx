@@ -1,5 +1,5 @@
 import PlayerData from '@/types/PlayerData'
-import styles from './SelectedPlayer.module.css'
+import styles from './selectedPlayer.module.css'
 
 interface SelectedPlayerProps {
   selectedPlayer?: PlayerData

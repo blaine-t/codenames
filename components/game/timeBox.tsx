@@ -1,6 +1,6 @@
 'use client'
 
-import styles from './TimeBox.module.css'
+import styles from './timeBox.module.css'
 import { useEffect, useState } from 'react'
 
 interface TimeBoxProps {

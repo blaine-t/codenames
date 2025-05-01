@@ -1,4 +1,4 @@
-import styles from './RoleBox.module.css'
+import styles from './roleBox.module.css'
 
 interface RoleBoxProps {
   role: string
