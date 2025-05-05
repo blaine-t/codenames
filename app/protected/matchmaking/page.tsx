@@ -67,6 +67,7 @@ function CodenamesPageContent() {
   const [turnTime, setTurnTime] = useState<number>(60)
   const [players, setPlayers] = useState<string[]>(['Player 1', 'Player 2', 'Player 3', 'Player 4'])
   const [selectedRoles, setSelectedRoles] = useState<boolean[]>([false, false, false, false])
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const supabase = createClient()
 
@@ -195,13 +196,23 @@ function CodenamesPageContent() {
   }
 
   const handleGameStart = async () => {
+    // Check if all roles are filled
+    const redSpymaster = selectedRoles[0]
+    const blueSpymaster = selectedRoles[1]
+    const redOperative = selectedRoles[2]
+    const blueOperative = selectedRoles[3]
+
+    if (!redSpymaster || !blueSpymaster || !redOperative || !blueOperative) {
+      setErrorMessage('Please select all roles before starting the game.')
+      return
+    }
+
     const data: CreateGameJson = {
       game_code: parseInt(gameCode),
       team1_id: 1,
       team2_id: 2,
       turn_time: turnTime,
     }
-    // https://stackoverflow.com/a/71927511
     await fetch('/api/createGame', {
       method: 'POST',
       mode: 'cors',
@@ -312,6 +323,14 @@ function CodenamesPageContent() {
           Start
         </button>
       </div>
+      {errorMessage && (
+        <div className="error-popup">
+          <div className="error-popup-content">
+            <p>{errorMessage}</p>
+            <button onClick={() => setErrorMessage(null)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

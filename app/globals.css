@@ -355,3 +355,36 @@ body {
 .bottomWrapper {
   display: flex;
 }
+
+.error-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  border-radius: 8px;
+  color: white;
+  z-index: 1000;
+  text-align: center;
+}
+
+.error-popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.error-popup button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.error-popup button:hover {
+  background-color: #45a049;
+}
