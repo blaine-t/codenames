@@ -66,6 +66,7 @@ function CodenamesPageContent() {
   const [userId, setUserId] = useState<number | null>(null)
   const [turnTime, setTurnTime] = useState<number>(60)
   const [players, setPlayers] = useState<string[]>(['Player 1', 'Player 2', 'Player 3', 'Player 4'])
+  const [selectedRoles, setSelectedRoles] = useState<boolean[]>([false, false, false, false])
 
   const supabase = createClient()
 
@@ -94,38 +95,42 @@ function CodenamesPageContent() {
           filter: `game_code=eq.${gameCode}`,
         },
         async () => {
-          // https://stackoverflow.com/a/75224812
-          const { data: playerRecord, error: playerError } = await supabase
+          const { data: playerRecord } = await supabase
             .from('Player')
-            .select(
-              `
+            .select(`
               User (username, image),
               Team (id, name),
               is_guesser
-              `
-            )
+            `)
             .eq('game_code', gameCode)
             .returns<PlayerInfo[]>()
             .limit(4)
+
           const playersTemp = ['Player 1', 'Player 2', 'Player 3', 'Player 4']
-          // There's a better way to do this but not with how we have this architected
-          const player1 = playerRecord?.find((x) => !x.is_guesser && x?.Team?.id === 1)?.User?.username
-          const player2 = playerRecord?.find((x) => !x.is_guesser && x?.Team?.id === 2)?.User?.username
-          const player3 = playerRecord?.find((x) => x.is_guesser && x?.Team?.id === 1)?.User?.username
-          const player4 = playerRecord?.find((x) => x.is_guesser && x?.Team?.id === 2)?.User?.username
-          if (player1) {
-            playersTemp[0] = player1
-          }
-          if (player2) {
-            playersTemp[1] = player2
-          }
-          if (player3) {
-            playersTemp[2] = player3
-          }
-          if (player4) {
-            playersTemp[3] = player4
-          }
+          const newSelectedRoles = [false, false, false, false]
+
+          playerRecord?.forEach(player => {
+            if (player.Team?.id === 1) {
+              if (!player.is_guesser) {
+                playersTemp[0] = player.User?.username || 'Player 1'
+                newSelectedRoles[0] = true
+              } else {
+                playersTemp[2] = player.User?.username || 'Player 3'
+                newSelectedRoles[2] = true
+              }
+            } else if (player.Team?.id === 2) {
+              if (!player.is_guesser) {
+                playersTemp[1] = player.User?.username || 'Player 2'
+                newSelectedRoles[1] = true
+              } else {
+                playersTemp[3] = player.User?.username || 'Player 4'
+                newSelectedRoles[3] = true
+              }
+            }
+          })
+
           setPlayers(playersTemp)
+          setSelectedRoles(newSelectedRoles)
         }
       )
       .subscribe()
@@ -261,18 +266,17 @@ function CodenamesPageContent() {
             <div className="player-buttons-container">
               {team.indices.map((index) => {
                 const roleLabel = index < 2 ? 'Spymaster' : 'Field Operative'
-                const customStyle =
-                  selectedPlayer === index
-                    ? {
-                        backgroundColor: team.cssClass.startsWith('red') ? 'red' : 'blue',
-                      }
-                    : {}
+                const customStyle = selectedRoles[index]
+                  ? {
+                      backgroundColor: team.cssClass.startsWith('red') ? 'red' : 'blue',
+                    }
+                  : {}
 
                 return (
                   <div className="player-button-wrapper" key={index}>
                     <PlayerSelectButton
                       index={index}
-                      selected={selectedPlayer === index}
+                      selected={selectedRoles[index]}
                       label={roleLabel}
                       onSelect={handlePlayerSelect}
                       customStyle={customStyle}
