@@ -192,6 +192,10 @@ function CodenamesPageContent() {
   })
 
   const handlePlayerSelect = (index: number) => {
+    // Don't allow selection if the role is already taken
+    if (selectedRoles[index]) {
+      return
+    }
     setSelectedPlayer((prev) => (prev === index ? null : index))
   }
 
