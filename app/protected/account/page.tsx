@@ -123,7 +123,7 @@ export default function AccountPage() {
             {incoming.map((req) => (
               <li className="friend" key={req.id}>
                 <Image
-                  src={req.requester.profile_picture || '/samplePFP.png'}
+                  src={req.requester.image || '/samplePFP.png'}
                   alt="Requester"
                   width={40}
                   height={40}
