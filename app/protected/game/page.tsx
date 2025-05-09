@@ -12,6 +12,7 @@ import Clue from '@/types/Clue'
 import PlayerData from '@/types/PlayerData'
 import SelectedPlayer from '@/components/game/selectedPlayer'
 import SkipTurnButton from '@/components/game/skipTurnButton'
+import WinnerSplashScreen from '@/components/game/winnerSplashScreen'
 
 function GameContent() {
   const searchParams = useSearchParams()
@@ -31,6 +32,7 @@ function GameContent() {
   const [players, setPlayers] = useState<PlayerData[] | null>(null)
   const [reset, setReset] = useState<boolean>(false)
   const [timerUp, setTimerUp] = useState<boolean>(false)
+  const [winningTeam, setWinningTeam] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchGameData = async (playerIdCurrent: number) => {
@@ -148,6 +150,14 @@ function GameContent() {
           } else {
             setClue(undefined)
           }
+          if (payload.new && 'winner_team_id' in payload.new && payload.new.winner_team_id) {
+            const {data: teamRecord } = await supabase
+              .from('Team')
+              .select('name')
+              .eq('id', payload.new.winner_team_id)
+              .single()
+            setWinningTeam(teamRecord?.name) 
+          }
         }
       )
       .subscribe()
@@ -214,6 +224,9 @@ function GameContent() {
 
   return (
     <>
+      <WinnerSplashScreen 
+        winningTeam={winningTeam}
+      />
       <TimeBox seconds={turnTime} reset={reset} setReset={setReset} setTimerUp={setTimerUp} />
       <div className="table">
         <RoleBox role={`${role} (${team})`} />
