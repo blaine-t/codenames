@@ -171,19 +171,36 @@
     }
 
     .friends-section {
-      @apply mt-6 w-[300px] text-center;
+      margin-top: 1.5rem;
+      width: 200px;
+      text-align: center;
     }
 
     .friends-title {
-      @apply text-lg font-bold mb-2;
+      font-size: 1.125rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
     }
 
     .friends-list {
-      @apply bg-card p-4 rounded-lg shadow-md;
+      background-color: var(--card);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
     }
 
     .friend {
-      @apply bg-gray-500 text-white px-4 py-2 rounded-lg mb-2;
+      display: flex;
+      align-items: center;
+      background-color: rgb(107 114 128);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .friend-img {
+      aspect-ratio: 1/1;
     }
   }
 

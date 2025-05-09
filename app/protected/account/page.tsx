@@ -155,7 +155,7 @@ export default function AccountPage() {
                   alt={`${friend.receiver.username}'s profile`}
                   width={40}
                   height={40}
-                  className="rounded-full"
+                  className="friend-img rounded-full"
                 />
                 <span className="ml-2">{friend.receiver.username}</span>
               </li>
