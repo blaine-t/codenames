@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import '../globals.css'
 import TitleImage from '@/components/titleImage'
+import InviteListener from '@/components/InviteListener'
 
 export default function CodenamesPage() {
   const router = useRouter()
@@ -57,6 +58,7 @@ export default function CodenamesPage() {
           Host
         </button>
       </div>
+      <InviteListener />
     </div>
   )
 }

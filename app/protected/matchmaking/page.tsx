@@ -5,6 +5,8 @@ import Image from 'next/image'
 import '../../globals.css'
 import { createClient } from '@/utils/supabase/client'
 import CreateGameJson from '@/types/CreateGameJson'
+import { InviteFriendsPopup } from '@/components/InviteFriendsPopup'
+import { RulesPopup } from '@/components/RulesPopup'
 
 function TitleImage({ gameCode }: { gameCode: string }) {
   return (
@@ -68,6 +70,8 @@ function CodenamesPageContent() {
   const [players, setPlayers] = useState<string[]>(['Player 1', 'Player 2', 'Player 3', 'Player 4'])
   const [selectedRoles, setSelectedRoles] = useState<boolean[]>([false, false, false, false])
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [showFriendsList, setShowFriendsList] = useState(false)
+  const [showRules, setShowRules] = useState(false)
 
   const supabase = createClient()
 
@@ -76,11 +80,13 @@ function CodenamesPageContent() {
     const fetchInitialRoles = async () => {
       const { data: playerRecord } = await supabase
         .from('Player')
-        .select(`
+        .select(
+          `
           User (username, image),
           Team (id, name),
           is_guesser
-        `)
+        `
+        )
         .eq('game_code', gameCode)
         .returns<PlayerInfo[]>()
         .limit(4)
@@ -88,7 +94,7 @@ function CodenamesPageContent() {
       const playersTemp = ['Player 1', 'Player 2', 'Player 3', 'Player 4']
       const newSelectedRoles = [false, false, false, false]
 
-      playerRecord?.forEach(player => {
+      playerRecord?.forEach((player) => {
         if (player.Team?.id === 1) {
           if (!player.is_guesser) {
             playersTemp[0] = player.User?.username || 'Player 1'
@@ -142,11 +148,13 @@ function CodenamesPageContent() {
         async () => {
           const { data: playerRecord } = await supabase
             .from('Player')
-            .select(`
+            .select(
+              `
               User (username, image),
               Team (id, name),
               is_guesser
-            `)
+            `
+            )
             .eq('game_code', gameCode)
             .returns<PlayerInfo[]>()
             .limit(4)
@@ -154,7 +162,7 @@ function CodenamesPageContent() {
           const playersTemp = ['Player 1', 'Player 2', 'Player 3', 'Player 4']
           const newSelectedRoles = [false, false, false, false]
 
-          playerRecord?.forEach(player => {
+          playerRecord?.forEach((player) => {
             if (player.Team?.id === 1) {
               if (!player.is_guesser) {
                 playersTemp[0] = player.User?.username || 'Player 1'
@@ -245,12 +253,8 @@ function CodenamesPageContent() {
 
   const handleGameStart = async () => {
     // Check if all roles are filled
-    const redSpymaster = selectedRoles[0]
-    const blueSpymaster = selectedRoles[1]
-    const redOperative = selectedRoles[2]
-    const blueOperative = selectedRoles[3]
-
-    if (!redSpymaster || !blueSpymaster || !redOperative || !blueOperative) {
+    // https://stackoverflow.com/a/53897696
+    if (selectedRoles.every(Boolean)) {
       setErrorMessage('Please select all roles before starting the game.')
       return
     }
@@ -379,6 +383,17 @@ function CodenamesPageContent() {
           </div>
         </div>
       )}
+      <div className="flex flex-col mt-4 space-y-2">
+        <button onClick={() => setShowFriendsList(true)} className="invite-friends-toggle">
+          📨 Invite Friends
+        </button>
+        <button onClick={() => setShowRules(true)} className="invite-friends-toggle">
+          📖 Show Rules
+        </button>
+      </div>
+      {showFriendsList && <InviteFriendsPopup gameCode={gameCode} onClose={() => setShowFriendsList(false)} />}
+
+      {showRules && <RulesPopup onClose={() => setShowRules(false)} />}
     </div>
   )
 }

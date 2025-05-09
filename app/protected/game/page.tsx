@@ -162,7 +162,7 @@ function GameContent() {
       const data = {
         game_code: gameCode,
         player_id: playerId,
-        guessing_team_id: teamId
+        guessing_team_id: teamId,
       }
       await fetch('/api/timerUp', {
         method: 'POST',

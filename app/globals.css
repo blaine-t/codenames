@@ -376,7 +376,7 @@ body {
 }
 
 .error-popup button {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -387,4 +387,28 @@ body {
 
 .error-popup button:hover {
   background-color: #45a049;
+}
+
+.friends-popup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+.friend-invite-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.invite-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
 }
