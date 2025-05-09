@@ -27,11 +27,20 @@ export default function SettingsPage() {
   }
 
   const handleProfilePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const imageUrl = URL.createObjectURL(file)
-      setProfilePic(imageUrl)
+    const uploadProfilePic = async () => {
+      const file = event.target.files?.[0]
+      if (file) {
+        const { data, error: uploadError } = await supabase.storage
+          .from('profiles')
+          .upload(file.name, file, { upsert: true })
+        if (uploadError) {
+          console.error('Error uploading image:', uploadError)
+          return
+        }
+        setProfilePic('https://pvlbusxlikrebqoalezp.supabase.co/storage/v1/object/public/profiles/' + data.path)
+      }
     }
+    uploadProfilePic()
   }
 
   const handleSaveChanges = async () => {
