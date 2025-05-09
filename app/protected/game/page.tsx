@@ -151,12 +151,12 @@ function GameContent() {
             setClue(undefined)
           }
           if (payload.new && 'winner_team_id' in payload.new && payload.new.winner_team_id) {
-            const {data: teamRecord } = await supabase
+            const { data: teamRecord } = await supabase
               .from('Team')
               .select('name')
               .eq('id', payload.new.winner_team_id)
               .single()
-            setWinningTeam(teamRecord?.name) 
+            setWinningTeam(teamRecord?.name)
           }
         }
       )
@@ -170,16 +170,18 @@ function GameContent() {
 
   useEffect(() => {
     const sendTimerUp = async () => {
-      const data = {
-        game_code: gameCode,
-        player_id: playerId,
-        guessing_team_id: teamId,
+      if (selectedPlayerId === playerId) {
+        const data = {
+          game_code: gameCode,
+          player_id: playerId,
+          guessing_team_id: teamId,
+        }
+        await fetch('/api/timerUp', {
+          method: 'POST',
+          mode: 'cors',
+          body: JSON.stringify(data),
+        })
       }
-      await fetch('/api/timerUp', {
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify(data),
-      })
     }
     if (timerUp) {
       setTimerUp(false)
@@ -224,9 +226,7 @@ function GameContent() {
 
   return (
     <>
-      <WinnerSplashScreen 
-        winningTeam={winningTeam}
-      />
+      <WinnerSplashScreen winningTeam={winningTeam} />
       <TimeBox seconds={turnTime} reset={reset} setReset={setReset} setTimerUp={setTimerUp} />
       <div className="table">
         <RoleBox role={`${role} (${team})`} />
@@ -244,11 +244,7 @@ function GameContent() {
             needClue={selectedPlayerId === playerId && !isGuesser}
             submitClue={submitClue}
           />
-          <SkipTurnButton
-            isSelected={selectedPlayerId === playerId}
-            isGuesser={isGuesser}
-            setTimerUp={setTimerUp}
-          />
+          <SkipTurnButton isSelected={selectedPlayerId === playerId} isGuesser={isGuesser} setTimerUp={setTimerUp} />
         </div>
       </div>
     </>
