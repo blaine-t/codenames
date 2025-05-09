@@ -387,13 +387,13 @@ function CodenamesPageContent() {
         <button onClick={() => setShowFriendsList(true)} className="invite-friends-toggle">
           📨 Invite Friends
         </button>
-        <button onClick={() => setShowRules(true)} className="invite-friends-toggle">
-          📖 Show Rules
+        <button onClick={() => setShowRules(!showRules)} className="invite-friends-toggle">
+          {showRules ? "📖 Hide Rules" : "📖 Show Rules"}
         </button>
       </div>
       {showFriendsList && <InviteFriendsPopup gameCode={gameCode} onClose={() => setShowFriendsList(false)} />}
 
-      {showRules && <RulesPopup onClose={() => setShowRules(false)} />}
+      {showRules && <RulesPopup />}
     </div>
   )
 }

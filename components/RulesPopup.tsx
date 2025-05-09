@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-export function RulesPopup({ onClose }: { onClose: () => void }) {
+export function RulesPopup() {
   return (
     <div className="rules-popup">
       <div className="rules-popup-content">
@@ -16,9 +16,6 @@ export function RulesPopup({ onClose }: { onClose: () => void }) {
           </li>
           <li>The first team to find all their agents wins. Avoid the assassin word at all costs!</li>
         </ul>
-        <button onClick={onClose} className="mt-4 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
-          Close
-        </button>
       </div>
     </div>
   )
