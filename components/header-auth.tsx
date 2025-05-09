@@ -9,6 +9,11 @@ export default async function AuthButton({ pathname }: { pathname: string }) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
+  const { data: userData } = await supabase
+        .from('User')
+        .select('username')
+        .eq('auth_id', user?.id)
+        .single()
   const showBackButton = pathname !== '/protected'
   const showAccountButton = pathname !== '/protected/account'
 
@@ -27,7 +32,7 @@ export default async function AuthButton({ pathname }: { pathname: string }) {
         </form>
       )}
       <div className="flex items-center gap-4">
-        Hey, {user.email}!
+        Hey, {userData?.username}!
         {showAccountButton && (
           <form action={accountAction}>
             <Button type="submit" variant={'outline'} data-testid={'account-button'}>
