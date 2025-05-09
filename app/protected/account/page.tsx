@@ -151,7 +151,7 @@ export default function AccountPage() {
             {friends.map((friend, index) => (
               <li className="friend" key={index}>
                 <Image
-                  src={friend.profile_picture || '/samplePFP.png'}
+                  src={friend.receiver.image || '/samplePFP.png'}
                   alt={`${friend.receiver.username}'s profile`}
                   width={40}
                   height={40}

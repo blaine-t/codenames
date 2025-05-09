@@ -76,7 +76,7 @@ export function InviteFriendsPopup({ gameCode, onClose }: { gameCode: string; on
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 relative">
                     <Image
-                      src={friend.image || '/samplePFP.png'}
+                      src={friend.receiver.image || '/samplePFP.png'}
                       alt={friend.receiver.username}
                       fill
                       className="rounded-full object-cover"
