@@ -21,6 +21,7 @@ export default function AccountPage() {
   const [incoming, setIncoming] = useState<any[]>([])
   const [searchUsername, setSearchUsername] = useState('')
   const [loadingFriends, setLoadingFriends] = useState(true)
+  const [user, setUser] = useState<any>(null)
 
   const handleSettings = () => {
     router.push('/protected/settings')
@@ -29,12 +30,13 @@ export default function AccountPage() {
   const fetchAll = async () => {
     const supabase = createClient()
     const {
-      data: { user },
+      data: { user: userData },
     } = await supabase.auth.getUser()
+    setUser(userData)
 
-    if (user?.id) {
+    if (userData?.id) {
       try {
-        const [friendList, requestList] = await Promise.all([getFriends(user.id), getIncomingRequests(user.id)])
+        const [friendList, requestList] = await Promise.all([getFriends(userData.id), getIncomingRequests(userData.id)])
         setFriends(friendList)
         setIncoming(requestList.data || [])
       } catch (err) {
@@ -151,13 +153,13 @@ export default function AccountPage() {
             {friends.map((friend, index) => (
               <li className="friend" key={index}>
                 <Image
-                  src={friend.receiver.image || '/samplePFP.png'}
-                  alt={`${friend.receiver.username}'s profile`}
+                  src={(friend.receiver_id === user.id ? friend.requester.image : friend.receiver.image) || '/samplePFP.png'}
+                  alt={`friend profile pic`}
                   width={40}
                   height={40}
                   className="friend-img rounded-full"
                 />
-                <span className="ml-2">{friend.receiver.username}</span>
+                <span className="ml-2">{friend.receiver_id === user.id ? friend.requester.username : friend.receiver.username}</span>
               </li>
             ))}
           </ul>

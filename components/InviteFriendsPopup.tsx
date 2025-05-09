@@ -9,22 +9,24 @@ export function InviteFriendsPopup({ gameCode, onClose }: { gameCode: string; on
   const [friends, setFriends] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const fetchFriends = async () => {
       const supabase = createClient()
       const {
-        data: { user },
+        data: { user: userData },
         error: authError,
       } = await supabase.auth.getUser()
-      if (!user || authError) {
+      if (!userData || authError) {
         setError('Authentication failed')
         setLoading(false)
         return
       }
+      setUser(userData)
 
       try {
-        const friendList = await getFriends(user.id)
+        const friendList = await getFriends(userData.id)
         setFriends(friendList)
       } catch (e) {
         setError('Failed to fetch friends')
@@ -76,16 +78,16 @@ export function InviteFriendsPopup({ gameCode, onClose }: { gameCode: string; on
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 relative">
                     <Image
-                      src={friend.receiver.image || '/samplePFP.png'}
-                      alt={friend.receiver.username}
+                      src={friend.receiver_id === user.id ? friend.requester.image : friend.receiver.image || '/samplePFP.png'}
+                      alt={"Friend profile pic"}
                       fill
                       className="rounded-full object-cover"
                     />
                   </div>
-                  <span>{friend.receiver.username}</span>
+                  <span>{friend.receiver_id === user.id ? friend.requester.username : friend.receiver.username}</span>
                 </div>
                 <button
-                  onClick={() => handleSendInvite(friend.receiver_id)}
+                  onClick={() => handleSendInvite(friend.receiver_id === user.id ? friend.requester_id : friend.receiver_id)}
                   className="px-3 py-1 bg-green-600 text-primary rounded hover:bg-green-600/90"
                 >
                   Send Invite
