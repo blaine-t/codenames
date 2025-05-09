@@ -411,7 +411,7 @@ body {
   top: 20%;
   left: 50%;
   transform: translateX(-50%);
-  background: white;
+  @apply bg-background;
   padding: 1rem;
   border-radius: 1rem;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);

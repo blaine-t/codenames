@@ -86,7 +86,7 @@ export function InviteFriendsPopup({ gameCode, onClose }: { gameCode: string; on
                 </div>
                 <button
                   onClick={() => handleSendInvite(friend.receiver_id)}
-                  className="px-3 py-1 bg-green-600 text-white rounded"
+                  className="px-3 py-1 bg-green-600 text-primary rounded hover:bg-green-600/90"
                 >
                   Send Invite
                 </button>
@@ -94,7 +94,7 @@ export function InviteFriendsPopup({ gameCode, onClose }: { gameCode: string; on
             ))}
           </ul>
         )}
-        <button onClick={onClose} className="mt-4 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+        <button onClick={onClose} className="mt-4 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded">
           Close
         </button>
       </div>
