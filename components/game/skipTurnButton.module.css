@@ -1,0 +1,28 @@
+.skipTurnButton {
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 0.5vh;
+  padding: 0 1vw;
+  font-size: 1.5vw;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: 100%;
+  text-align: center;
+  margin-left: 10px;
+}
+
+.skipTurnButton:hover {
+  background-color: #555;
+}
+
+.skipTurnButton:active {
+  background-color: #222;
+  transform: scale(0.98);
+}
+
+.skipTurnButton:focus {
+  outline: none;
+  box-shadow: 0 0 0.3vh rgba(0, 0, 0, 0.5);
+}

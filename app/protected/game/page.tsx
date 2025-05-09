@@ -11,6 +11,7 @@ import Board from '@/types/Board'
 import Clue from '@/types/Clue'
 import PlayerData from '@/types/PlayerData'
 import SelectedPlayer from '@/components/game/selectedPlayer'
+import SkipTurnButton from '@/components/game/skipTurnButton'
 
 function GameContent() {
   const searchParams = useSearchParams()
@@ -229,6 +230,11 @@ function GameContent() {
             isGuesser={isGuesser}
             needClue={selectedPlayerId === playerId && !isGuesser}
             submitClue={submitClue}
+          />
+          <SkipTurnButton
+            isSelected={selectedPlayerId === playerId}
+            isGuesser={isGuesser}
+            setTimerUp={setTimerUp}
           />
         </div>
       </div>
