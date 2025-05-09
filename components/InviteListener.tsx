@@ -21,7 +21,7 @@ const CustomToast = ({ message, metadata, onClose }: CustomToastProps) => {
     >
       <div className="flex items-center gap-2">
         <div className="text-sm">{message}</div>
-        <a 
+        <a
           href={`/protected/matchmaking?code=${metadata.gameCode}`}
           className="px-3 py-1 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md text-sm"
         >
@@ -38,40 +38,51 @@ const CustomToast = ({ message, metadata, onClose }: CustomToastProps) => {
 const InviteListener = () => {
   const supabase = createClient()
   const [toasts, setToasts] = useState<Toast[]>([])
+  const [userId, setUserId] = useState<string | null>(null)
 
   const removeToast = (id: number) => {
     setToasts((current) => current.filter((toast) => toast.id !== id))
   }
 
   useEffect(() => {
-    const subscription = supabase
-      .channel('notification-channel')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'Notifications',
-        },
-        (payload) => {
-          console.log(payload)
-          const newToast = {
-            id: Date.now(),
-            message: payload.new.message,
-            metadata: payload.new.metadata,
+    if (userId) {
+      const subscription = supabase
+        .channel('notification-channel')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'Notifications',
+            filter: `receiver_id=eq.${userId}`,
+          },
+          (payload) => {
+            console.log(payload)
+            const newToast = {
+              id: Date.now(),
+              message: payload.new.message,
+              metadata: payload.new.metadata,
+            }
+            setToasts((current) => [...current, newToast])
           }
-          setToasts((current) => [...current, newToast])
+        )
+        .subscribe()
 
-          // Auto-remove toast after 5 seconds
-          setTimeout(() => removeToast(newToast.id), 5000)
-        }
-      )
-      .subscribe()
-
-    return () => {
-      subscription.unsubscribe()
+      return () => {
+        subscription.unsubscribe()
+      }
+    } else {
+      const fetchUsername = async () => {
+        const {
+          data: { user: authUser },
+          error: authError,
+        } = await supabase.auth.getUser()
+        if (authError || !authUser) return console.error('Auth error', authError)
+        setUserId(authUser.id)
+      }
+      fetchUsername()
     }
-  }, [])
+  }, [userId])
 
   return (
     <>

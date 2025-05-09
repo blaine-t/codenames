@@ -254,7 +254,7 @@ function CodenamesPageContent() {
   const handleGameStart = async () => {
     // Check if all roles are filled
     // https://stackoverflow.com/a/53897696
-    if (selectedRoles.every(Boolean)) {
+    if (!selectedRoles.every(Boolean)) {
       setErrorMessage('Please select all roles before starting the game.')
       return
     }
