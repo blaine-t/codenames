@@ -17,7 +17,6 @@ export default async function AuthButton({ pathname }: { pathname: string }) {
       {showBackButton && (
         <form action={backAction}>
           <Button
-            style={{ backgroundColor: 'lightgray' }}
             className="back-button"
             type="submit"
             variant={'outline'}
