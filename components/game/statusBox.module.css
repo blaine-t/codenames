@@ -33,7 +33,7 @@
 }
 
 .textInput {
-  color: white;
+  @apply bg-background text-foreground;
   padding: 0.5vh 0.8vw;
   border-radius: 0.5vh;
   border: 1px solid #ccc;
@@ -43,7 +43,7 @@
 }
 
 .numberInput {
-  color: white;
+  @apply bg-background text-foreground;
   padding: 0.5vh 0.8vw;
   border-radius: 0.5vh;
   border: 1px solid #ccc;
@@ -59,8 +59,7 @@
 }
 
 .inputContainer button {
-  background-color: #333;
-  color: white;
+  @apply bg-background text-foreground;
   border: none;
   border-radius: 0.5vh;
   padding: 0 1vw;
@@ -73,11 +72,10 @@
 }
 
 .inputContainer button:hover {
-  background-color: #555;
+  background-color: #888;
 }
 
 .inputContainer button:active {
-  background-color: #222;
   transform: scale(0.98);
 }
 
