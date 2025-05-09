@@ -18,6 +18,40 @@ export async function POST(req: Request) {
 
   async function setWinner(winner_team_id: number) {
     const { data: updatedGame } = await supabase.from('Game').update({ winner_team_id }).eq('game_code', game_code)
+    const { data: winningTeam } = await supabase
+      .from('Player')
+      .select('user_id')
+      .eq('team_id', winner_team_id)
+      .eq('game_code', game_code)
+    const { data: losingTeam } = await supabase
+      .from('Player')
+      .select('user_id')
+      .eq('team_id', winner_team_id === gameData?.team1_id ? gameData?.team2_id : gameData?.team1_id)
+      .eq('game_code', game_code)
+
+    if (winningTeam) {
+      for (const player of winningTeam) {
+        const { data: userData } = await supabase.from('User').select('wins').eq('id', player.user_id).single()
+        if (userData) {
+          await supabase
+            .from('User')
+            .update({ wins: userData.wins + 1 })
+            .eq('id', player.user_id)
+        }
+      }
+    }
+
+    if (losingTeam) {
+      for (const player of losingTeam) {
+        const { data: userData } = await supabase.from('User').select('losses').eq('id', player.user_id).single()
+        if (userData) {
+          await supabase
+            .from('User')
+            .update({ losses: userData.losses + 1 })
+            .eq('id', player.user_id)
+        }
+      }
+    }
   }
 
   async function teamDecrementCardsRemaining(team_id: number) {
