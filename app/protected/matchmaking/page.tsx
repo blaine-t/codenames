@@ -295,7 +295,7 @@ function CodenamesPageContent() {
         return
       }
 
-      const teamId = teamData[0].id
+      const teamId = teamData[0]?.id
 
       const { error: upsertError } = await supabase.from('Player').upsert(
         {

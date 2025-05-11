@@ -6,11 +6,7 @@ import AccountPage from '@/app/protected/account/page'
 import SettingsPage from '@/app/protected/settings/page'
 import AuthButton from '@/components/header-auth'
 import { redirect } from 'next/navigation'
-
-const testUser = {
-  data: { id: 'user123', email: 'test@example.com', name: 'Test User' },
-  error: null,
-}
+import mockSupabaseClient from '../lib/mockSupabaseClient'
 
 const mockedUseRouter = {
   push: jest.fn(),
@@ -32,43 +28,6 @@ jest.mock('@/utils/supabase/useUserProfile', () => ({
     error: null,
   })),
 }))
-
-// There's got to be a better way to do this but for now this is the DRYest I can get it
-const mockSupabaseClient = {
-  auth: {
-    getUser: jest.fn(() => ({
-      data: { user: { id: 'user123', email: 'test@example.com' } },
-      error: null,
-    })),
-    signOut: jest.fn().mockReturnThis(),
-  },
-  from: jest.fn(() => {
-    return {
-      select: jest.fn().mockReturnThis(),
-      insert: jest.fn().mockReturnThis(),
-      update: jest.fn(() => ({
-        eq: jest.fn(() => ({
-          status: '204',
-          statusText: 'No Content',
-        })),
-        single: jest.fn(() => testUser),
-        then: jest.fn((callback) => callback(testUser)),
-      })),
-      delete: jest.fn().mockReturnThis(),
-      eq: jest.fn(() => ({
-        single: jest.fn(() => testUser),
-        limit: jest.fn().mockReturnThis(),
-      })),
-      single: jest.fn(() => testUser),
-      upsert: jest.fn(() => ({
-        eq: jest.fn(() => ({
-          single: jest.fn(() => testUser),
-        })),
-      })),
-      then: jest.fn((callback) => callback(testUser)),
-    }
-  }),
-}
 
 jest.mock('@/utils/supabase/client', () => ({
   createClient: jest.fn(() => mockSupabaseClient),

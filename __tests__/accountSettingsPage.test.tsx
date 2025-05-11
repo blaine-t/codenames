@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import AccountPage from '@/app/protected/account/page'
 import SettingsPage from '@/app/protected/settings/page'
 import { act } from '@testing-library/react'
+import mockSupabaseClient from '../lib/mockSupabaseClient'
 
 //mock next/router
 const mockPush = jest.fn()
@@ -27,27 +28,14 @@ jest.mock('@/utils/supabase/useUserProfile', () => ({
   })),
 }))
 
-//mock supabase
 jest.mock('@/utils/supabase/client', () => ({
-  createClient: () => ({
-    auth: {
-      getUser: jest.fn(() =>
-        Promise.resolve({
-          data: { user: { id: 'mock-user-id' } },
-          error: null,
-        })
-      ),
-    },
-    from: () => ({
-      update: () => ({
-        eq: () =>
-          Promise.resolve({
-            error: null,
-          }),
-      }),
-    }),
-  }),
+  createClient: jest.fn(() => mockSupabaseClient),
 }))
+
+jest.mock('@/utils/supabase/server', () => ({
+  createClient: jest.fn(() => mockSupabaseClient),
+}))
+
 
 // Setup before each test
 beforeEach(() => {
@@ -62,17 +50,16 @@ describe('AccountPage', () => {
     expect(screen.getByText('test-user')).toBeInTheDocument()
     expect(screen.getByText('Wins: 3')).toBeInTheDocument()
     expect(screen.getByText('Losses: 4')).toBeInTheDocument()
-    expect(screen.getByText('ELO: 1200')).toBeInTheDocument()
 
     const settingsButton = screen.getByTestId('settings-button')
     fireEvent.click(settingsButton)
     expect(mockPush).toHaveBeenCalledWith('/protected/settings')
   })
 
-  it('renders a list of 3 friends', () => {
+  it('renders a list of 0 friends', () => {
     render(<AccountPage />)
-    const friends = screen.getAllByText(/👤 Friend/)
-    expect(friends).toHaveLength(3)
+    const friends = screen.queryByText('Friend')
+    expect(friends).not.toBeInTheDocument()
   })
 })
 

@@ -95,7 +95,7 @@ export default function AccountPage() {
         <h2 className="username">{profile.username}</h2>
         <p>Wins: {profile.wins}</p>
         <p>Losses: {profile.losses}</p>
-        <button className="settings-button" onClick={handleSettings}>
+        <button className="settings-button" data-testid="settings-button" onClick={handleSettings}>
           ⚙️ Settings
         </button>
       </div>
