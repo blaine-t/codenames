@@ -1,3 +1,4 @@
+/* The actual card */
 .card {
   display: flex;
   background-color: #f2eadc;
@@ -11,14 +12,16 @@
   cursor: pointer;
 }
 
+/* Make cursor not show click when not active player */
 .card.isNotSelected {
   cursor: default;
 }
-
+/* Or if card is covered */
 .card.covered {
   cursor: default;
 }
 
+/* No longer a button but the white box in the card */
 .cardButton {
   display: flex;
   background-color: white;
@@ -33,6 +36,7 @@
   justify-content: center;
 }
 
+/* The hint at the top of the card for color impaired users */
 .textHint {
   position: absolute;
   top: 5px;
@@ -46,6 +50,7 @@
   margin: 0;
 }
 
+/* Custom colors and states for all of the cards */
 .card.blue {
   border-color: #0077cc;
   box-shadow: 0 0 20px #0099ff;

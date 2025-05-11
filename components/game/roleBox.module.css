@@ -1,3 +1,4 @@
+/* Box that holds the role */
 .box {
   margin-top: 1vh;
   color: white;
@@ -9,10 +10,10 @@
   text-align: center;
 }
 
+/* Adaptive colors based on team */
 .blue {
   background-color: rgb(0 0 255 / 75%);
 }
-
 .red {
   background-color: rgb(255 0 0 / 75%);
 }

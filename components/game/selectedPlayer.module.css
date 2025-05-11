@@ -1,3 +1,4 @@
+/* The little box around the selected player */
 .selectedPlayer {
   display: flex;
   align-items: center;
@@ -8,6 +9,7 @@
   margin-right: 10px;
 }
 
+/* Label of the selected player */
 .selectedPlayer h1 {
   font-size: 1.2rem;
   margin: 0;
@@ -15,6 +17,7 @@
   font-weight: 600;
 }
 
+/* Selected player profile pic */
 .selectedPlayer img {
   width: 32px;
   height: 32px;

@@ -1,3 +1,4 @@
+/* The container for the splash screen (centered on display) */
 .splashContainer {
   position: fixed;
   top: 0;
@@ -11,6 +12,7 @@
   z-index: 1000;
 }
 
+/* Words saying who won styling */
 .winnerContent {
   background-color: #fff;
   padding: 2rem 4rem;
@@ -19,6 +21,7 @@
   animation: popIn 0.5s ease-out;
 }
 
+/* Animations! */
 @keyframes popIn {
   0% {
     transform: scale(0);
@@ -28,25 +31,28 @@
   }
 }
 
+/* Game Over Title styling */
 .winnerTitle {
   color: #2c3e50;
   font-size: 3rem;
   margin-bottom: 1rem;
 }
 
+/* Winning team font size */
 .winnerTeam {
   font-size: 2.5rem;
   margin-bottom: 2rem;
 }
 
+/* Variable colors */
 .red {
   color: #cc0000;
 }
-
 .blue {
   color: #0077cc;
 }
 
+/* Button styling that allows you back to home */
 .backButton {
   padding: 1rem 2rem;
   font-size: 1.2rem;
@@ -57,7 +63,6 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-
 .backButton:hover {
   background-color: #333;
 }

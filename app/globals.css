@@ -251,12 +251,14 @@
   }
 }
 
+/* Get rid of margins across the whole app and set the Codenames font */
 body {
   margin: 0;
   padding: 0;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+/* Styling for the host/join options on the main page */
 .join-section {
   display: flex;
   flex-direction: row;
@@ -265,6 +267,7 @@ body {
   gap: 16px;
 }
 
+/* Main container for the matchmaking page */
 .main-container {
   display: flex;
   flex-direction: column;
@@ -273,6 +276,7 @@ body {
   text-align: center;
 }
 
+/* Styling for holding the game page on  */
 .game-code {
   display: flex;
   flex-direction: column;
@@ -280,6 +284,7 @@ body {
   margin-bottom: 1rem; /* optional spacing */
 }
 
+/* Styling to show the table in the background for the game */
 .table {
   display: flex;
   width: 100vw;
@@ -291,16 +296,20 @@ body {
   justify-content: space-between;
 }
 
+/* Background for main page before login */
 .background {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-image: url('/background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
   width: 100vw;
   height: 100vh;
 }
 
+/* Wrapper for main page */
 .wrapper {
   @apply bg-background text-foreground;
   width: fit-content;
@@ -308,11 +317,13 @@ body {
   border-radius: 1.5vw;
 }
 
+/* Used for each of the teams in matchmaking */
 .player-teams-container {
   display: flex;
   justify-content: space-between;
 }
 
+/* Red team matchmaking heading */
 .red-team-group h2 {
   color: red;
   font-weight: bold;
@@ -320,6 +331,7 @@ body {
   margin-bottom: 0.5rem;
 }
 
+/* Blue team matchmaking heading */
 .blue-team-group h2 {
   color: blue;
   font-weight: bold;
@@ -327,36 +339,42 @@ body {
   margin-bottom: 0.5rem;
 }
 
+/* Holds the player buttons on matchmaking */
 .player-buttons-container {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
+/* Holds the teams on matchmaking */
 .player-teams-container {
   display: flex;
   justify-content: space-between;
   gap: 2rem;
 }
 
+/* Flex for the players on a team */
 .team-group {
   display: flex;
   flex-direction: column;
   align-items: flex-center;
 }
 
+/* Holds the buttons in matchmaking with good gap */
 .player-buttons-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
+/* Div to wrap the player button */
 .player-button-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* Label for the button to show whos who */
 .player-label {
   margin-top: 0.25rem;
   font-size: 1.2rem;
@@ -369,10 +387,12 @@ body {
   }
 }
 
+/* Flexbox for bottom of gamepage */
 .bottomWrapper {
   display: flex;
 }
 
+/* Error popup when bad settings are picked */
 .error-popup {
   position: fixed;
   top: 50%;
@@ -386,12 +406,14 @@ body {
   text-align: center;
 }
 
+/* Styling for contents of error */
 .error-popup-content {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
+/* Styling for ok button */
 .error-popup button {
   background-color: #4caf50;
   color: white;
@@ -406,6 +428,7 @@ body {
   background-color: #45a049;
 }
 
+/* Popup that shows friends in matchmaking */
 .friends-popup {
   position: fixed;
   top: 20%;
@@ -417,12 +440,16 @@ body {
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
   z-index: 100;
 }
+
+/* Row of each friend in the popup */
 .friend-invite-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
+/* Invite Button for players */
 .invite-button {
   background-color: #2563eb;
   color: white;
