@@ -21,6 +21,7 @@ function shuffle(array: any[]) {
   }
 }
 
+// Generates the board json for the game
 function generateBoard(team1_id: number, team2_id: number) {
   const words = generate({
     minLength: 3,
@@ -51,12 +52,14 @@ function generateBoard(team1_id: number, team2_id: number) {
   return board
 }
 
+// POST handler
 export async function POST(req: Request) {
-  const supabase = await createClient()
-
   // Get data from the client
   const { game_code, team1_id, team2_id, turn_time } = (await req.json()) as CreateGameJson
-
+  
+  const supabase = await createClient()
+  
+  // Get information for the game
   const board = generateBoard(team1_id, team2_id)
 
   const { data: playerData } = await supabase
@@ -68,6 +71,7 @@ export async function POST(req: Request) {
     .single()
   const selected_player_id = playerData?.id
 
+  // Create the game
   const { error: upsertError } = await supabase.from('Game').upsert(
     {
       selected_player_id,
@@ -85,9 +89,11 @@ export async function POST(req: Request) {
     return new Response('Failed to insert/update game', { status: 500 })
   }
 
+  // Update the taems cards left
   await supabase.from('Team').update({ cards_remaining: CARDS_TEAM1 }).eq('id', team1_id)
   await supabase.from('Team').update({ cards_remaining: CARDS_TEAM2 }).eq('id', team2_id)
 
+  // Tell the client to redirect to the game page with a temporary redirect
   return new Response(null, {
     status: 307,
     headers: {

@@ -33,7 +33,7 @@ export default function RootLayout({
                   <div className="flex gap-5 items-center font-semibold">
                     <div className="flex items-center"></div>
                   </div>
-                  {<HeaderAuth pathname="TODO" />}
+                  {<HeaderAuth />}
                 </div>
               </nav>
               <div>{children}</div>

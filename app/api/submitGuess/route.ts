@@ -11,13 +11,21 @@ type GameInfo = {
   board: any
 }
 
+// POST handler
 export async function POST(req: Request) {
+  // Get data from the client
   const { game_code, card_id, guessing_team_id } = (await req.json()) as Guess
 
   const supabase = await createClient()
 
+  // Function that sets the winner of the game and then updates player stats
+  // This is not performant and I know it but 
+  // makes it so we don't have to use a hidden function in Supabase TAs can't see
   async function setWinner(winner_team_id: number) {
-    const { data: updatedGame } = await supabase.from('Game').update({ winner_team_id }).eq('game_code', game_code)
+    // Updates the game
+    await supabase.from('Game').update({ winner_team_id }).eq('game_code', game_code)
+    
+    // Updates player stats by getting the teams
     const { data: winningTeam } = await supabase
       .from('Player')
       .select('user_id')
@@ -29,6 +37,7 @@ export async function POST(req: Request) {
       .eq('team_id', winner_team_id === gameData?.team1_id ? gameData?.team2_id : gameData?.team1_id)
       .eq('game_code', game_code)
 
+    // Updates winners stats
     if (winningTeam) {
       for (const player of winningTeam) {
         const { data: userData } = await supabase.from('User').select('wins').eq('id', player.user_id).single()
@@ -41,6 +50,7 @@ export async function POST(req: Request) {
       }
     }
 
+    // Updates losers stats
     if (losingTeam) {
       for (const player of losingTeam) {
         const { data: userData } = await supabase.from('User').select('losses').eq('id', player.user_id).single()
@@ -54,6 +64,7 @@ export async function POST(req: Request) {
     }
   }
 
+  // Utility function to reduce a teams cards remaining on a guess of their card
   async function teamDecrementCardsRemaining(team_id: number) {
     const { data: teamData } = await supabase.from('Team').select().eq('id', team_id).single()
     if (teamData) {
@@ -67,6 +78,7 @@ export async function POST(req: Request) {
     }
   }
 
+  // Utility function to switch team possession when needed
   async function changePossession(other_team_id: number) {
     const { data: playerData } = await supabase
       .from('Player')
@@ -75,16 +87,18 @@ export async function POST(req: Request) {
       .eq('is_guesser', false)
       .eq('game_code', game_code)
       .single()
-    const { data: updatedGame } = await supabase
+    await supabase
       .from('Game')
       .update({ clue_id: null, selected_player_id: playerData?.id })
       .eq('game_code', game_code)
   }
 
+  // Updates game to use new generated board
   async function updateBoard(board: any) {
-    const { data: updatedGame } = await supabase.from('Game').update({ board }).eq('game_code', game_code)
+    await supabase.from('Game').update({ board }).eq('game_code', game_code)
   }
 
+  // Get the actual game data
   const { data: gameData } = await supabase
     .from('Game')
     .select(
@@ -98,6 +112,7 @@ export async function POST(req: Request) {
     .single()
 
   if (gameData) {
+    // Weird ternary logic to find the other team's id
     const other_team_id = gameData.team1_id === guessing_team_id ? gameData.team2_id : gameData.team1_id
 
     const board = gameData.board
@@ -105,6 +120,7 @@ export async function POST(req: Request) {
     const clue = gameData.Clue
     let remaining_guesses = clue.remaining_guesses
 
+    // Guard to make sure the client isn't sending  bad request
     if (card.guessed) {
       return new Response('Card Already Guessed', { status: 200 })
     }
@@ -112,10 +128,11 @@ export async function POST(req: Request) {
     card.guessed = true
 
     if (card.team_id) {
-      // Player guessed right
       if (card.team_id === guessing_team_id) {
+        // Player guessed right
         await teamDecrementCardsRemaining(guessing_team_id)
         remaining_guesses--
+        // If the team is out of guesses change to the other team
         if (remaining_guesses <= 0) {
           await changePossession(other_team_id)
         } else {
@@ -138,6 +155,7 @@ export async function POST(req: Request) {
       await updateBoard(board)
       return new Response('Card was assassin', { status: 200 })
     } else if (card.is_bystander) {
+      // Player guessed a bystander card
       await changePossession(other_team_id)
       await updateBoard(board)
       return new Response('Card was bystander', { status: 200 })

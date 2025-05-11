@@ -1,36 +1,30 @@
 import { accountAction, backAction, signOutAction } from '@/app/actions'
 import Link from 'next/link'
-import { Badge } from './ui/badge'
 import { Button } from './ui/button'
 import { createClient } from '@/utils/supabase/server'
 
-export default async function AuthButton({ pathname }: { pathname: string }) {
+export default async function AuthButton() {
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
   const { data: userData } = await supabase.from('User').select('username').eq('auth_id', user?.id).single()
-  const showBackButton = pathname !== '/protected'
-  const showAccountButton = pathname !== '/protected/account'
 
   return user ? (
     <>
-      {showBackButton && (
-        <form action={backAction}>
-          <Button className="back-button" type="submit" variant={'outline'} data-testid={'back-button'}>
-            ← Back
-          </Button>
-        </form>
-      )}
+      
+      <form action={backAction}>
+        <Button className="back-button" type="submit" variant={'outline'} data-testid={'back-button'}>
+          ← Back
+        </Button>
+      </form>
       <div className="flex items-center gap-4">
         Hey, {userData?.username}!
-        {showAccountButton && (
-          <form action={accountAction}>
-            <Button type="submit" variant={'outline'} data-testid={'account-button'}>
-              Account
-            </Button>
-          </form>
-        )}
+        <form action={accountAction}>
+          <Button type="submit" variant={'outline'} data-testid={'account-button'}>
+            Account
+          </Button>
+        </form>
         <form action={signOutAction}>
           <Button
             type="submit"
