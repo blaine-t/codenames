@@ -9,7 +9,7 @@ export function InviteFriendsPopup({ gameCode, onClose }: { gameCode: string; on
   const [friends, setFriends] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(null)
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -78,8 +78,12 @@ export function InviteFriendsPopup({ gameCode, onClose }: { gameCode: string; on
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 relative">
                     <Image
-                      src={friend.receiver_id === user.id ? friend.requester.image : friend.receiver.image || '/samplePFP.png'}
-                      alt={"Friend profile pic"}
+                      src={
+                        friend.receiver_id === user.id
+                          ? friend.requester.image
+                          : friend.receiver.image || '/samplePFP.png'
+                      }
+                      alt={'Friend profile pic'}
                       fill
                       className="rounded-full object-cover"
                     />
@@ -87,7 +91,9 @@ export function InviteFriendsPopup({ gameCode, onClose }: { gameCode: string; on
                   <span>{friend.receiver_id === user.id ? friend.requester.username : friend.receiver.username}</span>
                 </div>
                 <button
-                  onClick={() => handleSendInvite(friend.receiver_id === user.id ? friend.requester_id : friend.receiver_id)}
+                  onClick={() =>
+                    handleSendInvite(friend.receiver_id === user.id ? friend.requester_id : friend.receiver_id)
+                  }
                   className="px-3 py-1 bg-green-600 text-primary rounded hover:bg-green-600/90"
                 >
                   Send Invite
@@ -96,7 +102,10 @@ export function InviteFriendsPopup({ gameCode, onClose }: { gameCode: string; on
             ))}
           </ul>
         )}
-        <button onClick={onClose} className="mt-4 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded">
+        <button
+          onClick={onClose}
+          className="mt-4 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded"
+        >
           Close
         </button>
       </div>

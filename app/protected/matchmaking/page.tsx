@@ -388,7 +388,7 @@ function CodenamesPageContent() {
           📨 Invite Friends
         </button>
         <button onClick={() => setShowRules(!showRules)} className="invite-friends-toggle">
-          {showRules ? "📖 Hide Rules" : "📖 Show Rules"}
+          {showRules ? '📖 Hide Rules' : '📖 Show Rules'}
         </button>
       </div>
       {showFriendsList && <InviteFriendsPopup gameCode={gameCode} onClose={() => setShowFriendsList(false)} />}

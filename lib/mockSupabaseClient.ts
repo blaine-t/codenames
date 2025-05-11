@@ -25,7 +25,7 @@ const mockSupabaseClient = {
         })),
         single: jest.fn(() => testUser),
         then: jest.fn((callback) => callback(testUser)),
-        ilike: jest.fn().mockReturnThis()
+        ilike: jest.fn().mockReturnThis(),
       })),
       insert: jest.fn().mockReturnThis(),
       update: jest.fn(() => ({

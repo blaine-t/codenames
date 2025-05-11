@@ -153,13 +153,18 @@ export default function AccountPage() {
             {friends.map((friend, index) => (
               <li className="friend" key={index}>
                 <Image
-                  src={(friend.receiver_id === user.id ? friend.requester.image : friend.receiver.image) || '/samplePFP.png'}
+                  src={
+                    (friend.receiver_id === user.id ? friend.requester.image : friend.receiver.image) ||
+                    '/samplePFP.png'
+                  }
                   alt={`friend profile pic`}
                   width={40}
                   height={40}
                   className="friend-img rounded-full"
                 />
-                <span className="ml-2">{friend.receiver_id === user.id ? friend.requester.username : friend.receiver.username}</span>
+                <span className="ml-2">
+                  {friend.receiver_id === user.id ? friend.requester.username : friend.receiver.username}
+                </span>
               </li>
             ))}
           </ul>

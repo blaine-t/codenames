@@ -9,11 +9,7 @@ export default async function AuthButton({ pathname }: { pathname: string }) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  const { data: userData } = await supabase
-        .from('User')
-        .select('username')
-        .eq('auth_id', user?.id)
-        .single()
+  const { data: userData } = await supabase.from('User').select('username').eq('auth_id', user?.id).single()
   const showBackButton = pathname !== '/protected'
   const showAccountButton = pathname !== '/protected/account'
 
@@ -21,12 +17,7 @@ export default async function AuthButton({ pathname }: { pathname: string }) {
     <>
       {showBackButton && (
         <form action={backAction}>
-          <Button
-            className="back-button"
-            type="submit"
-            variant={'outline'}
-            data-testid={'back-button'}
-          >
+          <Button className="back-button" type="submit" variant={'outline'} data-testid={'back-button'}>
             ← Back
           </Button>
         </form>

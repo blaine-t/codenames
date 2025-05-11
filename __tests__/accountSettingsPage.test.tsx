@@ -36,7 +36,6 @@ jest.mock('@/utils/supabase/server', () => ({
   createClient: jest.fn(() => mockSupabaseClient),
 }))
 
-
 // Setup before each test
 beforeEach(() => {
   mockPush.mockClear()
