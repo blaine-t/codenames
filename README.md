@@ -2,7 +2,7 @@
 
 <div align="center">
   <a href="https://github.com/blaine-t/fwd_outlook_graph">
-    <img src="public/R1.png" alt="Logo" height="360">
+    <img src="public/R2.png" alt="Logo" height="360">
   </a>
 </div>
 
@@ -19,15 +19,17 @@ We will create a simple, accessible web application version of Codenames for 4+ 
 
 - Supabase - We ended up going with Supabase for our database as it has great integration with Next.js and allows us to have an easy auth flow
 
-## Demo Video - WIP
-
 ## Account / Lobby
 
 For R1 we wanted to have a working account and lobby.
 
 ## Game
 
-For R2 we finished up implementing the game and now (hopefully) have a fully featured game available at https://codenames.traudt.dev
+For R2 we finished up implementing the game and now have a fully featured game available at https://codenames.traudt.dev
+
+## Deployment
+
+We deployed on Vercel and it was easy as importing it into Vercel. You can follow [the docs Vercel provides](https://vercel.com/docs/deployments)
 
 ## Our Team
 
